@@ -11,6 +11,10 @@ export const shortlinkSchema = v.object({
 
 export const visitSchema = v.object({
 	shortlink_id: v.string(),
+	browser: v.nullable(v.string()),
+	os: v.nullable(v.string()),
+	cpu: v.nullable(v.string()),
+	engine: v.nullable(v.string()),
 	visited_at: v.pipe(
 		v.string(),
 		v.isoDateTimeSecond(),
@@ -26,5 +30,6 @@ export type Visit = v.InferInput<typeof visitSchema>
 export type VisitCount = v.InferInput<typeof visitCountSchema>
 
 export type ShortlinkInfo = Shortlink & {
-	visits: number
+	visitCount: number
+	visits: Visit[]
 }

@@ -5,6 +5,7 @@ import type { ShortlinkInfo } from "../db/schemas.ts"
 export default function generateInspectPage(shortlink: ShortlinkInfo) {
 	const head = generateHead("inspect")
 	const shortlinkInfo = generateShortlinkInfo(shortlink)
+	console.log("shortlinkInfo", shortlink)
 
 	return `
 <!DOCTYPE html>

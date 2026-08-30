@@ -31,6 +31,7 @@ app.get("/inspect/:id", (req, res) => {
 })
 
 app.get("/:id", (req, res, next) => {
+	const ua = new UserAgent(req.headers["user-agent"] ?? "")
 	const id = req.params.id
 	const shortlink = getShortlink(id)
 
@@ -40,7 +41,7 @@ app.get("/:id", (req, res, next) => {
 	}
 
 	res.redirect(shortlink.url)
-	recordVisit(id)
+	recordVisit(id, ua.browser.name ?? null, ua.os.name ?? null, ua.cpu.architecture ?? null, ua.engine.name ?? null)
 })
 
 app.use(express.static("public"))

@@ -1,7 +1,7 @@
 import Database from "better-sqlite3"
 import { readFile, mkdir } from "node:fs/promises"
 import * as v from "@valibot/valibot"
-import { type Shortlink, type ShortlinkInfo, shortlinkSchema, visitCountSchema } from "./schemas.ts"
+import { type Shortlink, type ShortlinkInfo, shortlinkSchema, type Visit, visitCountSchema, visitSchema } from "./schemas.ts"
 
 const initSql = await readFile("./queries/init.sql", "utf-8")
 console.log("initSql", initSql)
@@ -16,7 +16,7 @@ db.exec(initSql)
 const queries = {
 	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url) VALUES (@id, @url)"),
 	getShortlink: db.prepare("SELECT * FROM shortlinks WHERE id = @id"),
-	insertVisit: db.prepare("INSERT INTO visits (shortlink_id) VALUES (@shortlink_id)"),
+	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine) VALUES (@shortlink_id, @browser, @os, @cpu, @engine)"),
 	getVisits: db.prepare("SELECT * FROM visits WHERE shortlink_id = @shortlink_id ORDER BY visited_at DESC LIMIT @limit"),
 	countVisits: db.prepare("SELECT COUNT(*) as count FROM visits WHERE shortlink_id = @shortlink_id"),
 }
@@ -37,17 +37,24 @@ export function getShortlink(id: string): Shortlink | null {
 
 export function getShortlinkInfo(id: string): ShortlinkInfo | null {
 	const shortlink = getShortlink(id)
-	const visits = countVisits(id)
+	const visits = getVisits(id, 10)
+	const visitCount = countVisits(id)
 
 	if (!shortlink) {
 		return null
 	}
 
-	return { ...shortlink, visits }
+	return { ...shortlink, visits, visitCount }
 }
 
-export function recordVisit(shortlink_id: string) {
-	queries.insertVisit.run({ shortlink_id })
+export function recordVisit(shortlink_id: string, browser: string | null, os: string | null, cpu: string | null, engine: string | null) {
+	queries.insertVisit.run({ shortlink_id, browser, os, cpu, engine })
+}
+
+export function getVisits(shortlink_id: string, limit: number): Visit[] {
+	const data = queries.getVisits.all({ shortlink_id, limit })
+
+	return data.map((row) => parse(visitSchema, "visit", row)).filter(visit => visit !== null)
 }
 
 export function countVisits(shortlink_id: string): number {

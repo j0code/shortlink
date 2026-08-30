@@ -6,6 +6,10 @@ CREATE TABLE IF NOT EXISTS shortlinks (
 
 CREATE TABLE IF NOT EXISTS visits (
 	shortlink_id STRING NOT NULL,
+	browser STRING,
+	os STRING,
+	cpu STRING,
+	engine STRING,
 	visited_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	FOREIGN KEY (shortlink_id) REFERENCES shortlinks(id)
 );
