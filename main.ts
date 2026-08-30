@@ -1,6 +1,7 @@
 import config from "./config/config.ts"
 import express from "express"
-import homepage from "./pages/index.ts"
+import homepage from "./pages/home.ts"
+import inspectPage from "./pages/inspect.ts"
 import { registerResources } from "./api/resources.ts"
 import { getShortlink } from "./db/db.ts"
 
@@ -11,7 +12,23 @@ const app = express()
 app.use("/api", express.json())
 registerResources(app)
 
-app.get("/:id", async (req, res, next) => {
+app.get("/", (_req, res) => {
+	res.status(200).send(homepage)
+})
+
+app.get("/inspect/:id", (req, res) => {
+	const { id } = req.params
+	const shortlink = getShortlink(id)
+
+	if (!shortlink) {
+		res.status(404).send("Shortlink not found")
+		return
+	}
+
+	res.status(200).send(inspectPage(shortlink))
+})
+
+app.get("/:id", (req, res, next) => {
 	const id = req.params.id
 	const shortlink = getShortlink(id)
 
@@ -21,10 +38,6 @@ app.get("/:id", async (req, res, next) => {
 	}
 
 	res.redirect(shortlink.url)
-})
-
-app.get("/", (_req, res) => {
-	res.status(200).send(homepage)
 })
 
 app.use(express.static("public"))

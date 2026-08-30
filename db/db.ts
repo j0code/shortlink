@@ -32,7 +32,9 @@ export function getShortlink(id: string): Shortlink | null {
 	const result = v.safeParse(shortlinkSchema, data)
 
 	if (!result.success) {
-		console.error("ERROR", `Failed to parse shortlink from database for id ${id}:`, result.issues)
+		const summary = v.summarize(result.issues)
+		console.error("ERROR", `Failed to parse shortlink from database for id ${id}:`, data)
+		console.error(summary)
 		return null
 	}
 

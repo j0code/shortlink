@@ -5,7 +5,8 @@ export type Config = {
 	hostname: string,
 	branding: {
 		name: string
-	}
+	},
+	baseUrl: string
 }
 
 const initial: Config = {
@@ -13,7 +14,8 @@ const initial: Config = {
 	hostname: "127.0.0.1",
 	branding: {
 		name: "Shortlink"
-	}
+	},
+	baseUrl: "http://localhost:3000"
 }
 
 const ConfigSchema = v.looseObject({
@@ -22,6 +24,7 @@ const ConfigSchema = v.looseObject({
 	branding: v.optional(v.looseObject({
 		name: v.optional(v.string(), initial.branding.name)
 	}), initial.branding),
+	baseUrl: v.optional(v.pipe(v.string(), v.url()), initial.baseUrl)
 })
 
 export function parse(obj: unknown) {

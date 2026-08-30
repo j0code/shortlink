@@ -6,7 +6,10 @@ const CreateShortlinkForm = `
 	</label>
 	<button>Create link!</button>
 	<label>
-		Shortlink: <output name="result" for="url" tabindex="0" title="Generated shortlink. Press space to copy." aria-live="polite"></output>
+		Shortlink: <output name="shortlink" for="url" aria-live="polite" class="copyable"></output>
+	</label>
+	<label>
+		Shortlink ID: <output name="shortlinkId" for="url" aria-live="polite" class="copyable"></output>
 	</label>
 </form>
 `.trim()

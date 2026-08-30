@@ -45,7 +45,7 @@ form {
 	padding: 20px;
 }
 
-label {
+label, p {
 	display: flex;
 	align-items: center;
 	gap: 10px;
@@ -79,11 +79,6 @@ button {
 
 output {
 	color: var(--text-color);
-	border: none;
-	border-radius: 10px;
-	padding-inline: 10px;
-	padding-block: 5px;
-	cursor: pointer;
 
 	&:hover, &:focus-visible {
 		outline-style: dashed;
@@ -95,4 +90,12 @@ output {
 	height: 2px;
 	background-color: #ffffff40;
 	border-radius: 2px;
+}
+
+.copyable {
+	border: none;
+	border-radius: 10px;
+	padding-inline: 10px;
+	padding-block: 5px;
+	cursor: pointer;
 }
