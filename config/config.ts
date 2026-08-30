@@ -1,11 +1,14 @@
 import YSON from "@j0code/yson"
 import { access, writeFile } from "node:fs/promises"
-import { Config, parse } from "./schema.ts"
+import { type Config, parse } from "./schema.ts"
 import * as v from '@valibot/valibot'
 
 const CONFIG_LOCATION = process.env.CONFIG_LOCATION || "./config.yson"
 
-export async function loadConfig(): Promise<Config> {
+const config = await loadConfig()
+export default config
+
+async function loadConfig(): Promise<Config> {
 	const raw = await readConfig()
 	const result = parse(raw)
 
