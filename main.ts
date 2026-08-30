@@ -3,7 +3,8 @@ import express from "express"
 import homepage from "./pages/home.ts"
 import inspectPage from "./pages/inspect.ts"
 import { registerResources } from "./api/resources.ts"
-import { getShortlink } from "./db/db.ts"
+import { getShortlink, getShortlinkInfo, recordVisit } from "./db/db.ts"
+import { UserAgent } from "@std/http/user-agent"
 
 console.log("CONFIG", config)
 
@@ -18,14 +19,15 @@ app.get("/", (_req, res) => {
 
 app.get("/inspect/:id", (req, res) => {
 	const { id } = req.params
-	const shortlink = getShortlink(id)
+	const info = getShortlinkInfo(id)
 
-	if (!shortlink) {
+
+	if (!info) {
 		res.status(404).send("Shortlink not found")
 		return
 	}
 
-	res.status(200).send(inspectPage(shortlink))
+	res.status(200).send(inspectPage(info))
 })
 
 app.get("/:id", (req, res, next) => {
@@ -38,6 +40,7 @@ app.get("/:id", (req, res, next) => {
 	}
 
 	res.redirect(shortlink.url)
+	recordVisit(id)
 })
 
 app.use(express.static("public"))
