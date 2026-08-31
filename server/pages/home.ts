@@ -1,8 +1,8 @@
-import info from "../package_info.ts"
 import config from "../config/config.ts"
 import CreateShortlinkForm from "../components/CreateShortlinkForm.ts"
 import InspectShortlinkForm from "../components/InspectShortlinkForm.ts"
 import { generateHead } from "../components/Head.ts"
+import Footer from "../components/Footer.ts"
 
 const branding = config.branding
 
@@ -11,13 +11,16 @@ const page = `
 <html lang="en">
 ${generateHead("home")}
 <body>
-	<main>
+	<div id="card">
 		<h1>${branding.name}</h1>
-		<div class="divider"></div>
-		${CreateShortlinkForm}
-		<div class="divider"></div>
-		${InspectShortlinkForm}
-	</main>
+		<main>
+			<div class="divider"></div>
+			${CreateShortlinkForm}
+			<div class="divider"></div>
+			${InspectShortlinkForm}
+		</main>
+		${Footer}
+	</div>
 </body>
 </html>
 `.trim()

@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises"
 import process from "node:process"
 import { exec } from "node:child_process"
 import { promisify } from "node:util"
+import { PROJECT_NAME } from "./constants.ts"
 
 const execPromise = promisify(exec)
 const cwd = process.cwd()
@@ -35,7 +36,7 @@ if (typeof denojson != "object"
 }
 
 export default {
-	name:    denojson.name,
+	name:    PROJECT_NAME,
 	version: denojson.version,
 	commit:  commit,
 	branch:  branch

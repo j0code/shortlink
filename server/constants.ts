@@ -8,3 +8,5 @@ export const ILLEGAL_IDS = [
 	"js",
 	"css"
 ]
+
+export const PROJECT_NAME = "shortlink"

@@ -20,18 +20,27 @@ body {
 	}
 }
 
-main {
+#card {
 	background: var(--background-secondary);
 	display: flex;
 	flex-direction: column;
 	width: min(60vw, 700px);
 	height: max(80vh, 10px);
 	border-radius: 10px;
-	padding: 0px 20px 20px 20px;
+	padding: 20px;
+	gap: 15px;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	scrollbar-gutter: stable;
 }
 
 h1 {
 	text-align: center;
+	margin: 0px;
 }
 
 h3 {
@@ -106,4 +115,12 @@ table {
 	td {
 		text-align: center;
 	}
+}
+
+#footer {
+	color: var(--footer-text-color);
+	display: flex;
+	flex: 1 0 auto;
+	align-items: end;
+	justify-content: space-between;
 }
