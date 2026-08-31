@@ -1,10 +1,10 @@
 import { generateHead } from "../components/Head.ts"
 import { generateShortlinkInfo } from "../components/ShortlinkInfo.ts"
-import type { ShortlinkInfo } from "../db/schemas.ts"
+import type { ShortlinkInfo, Visit } from "../db/schemas.ts"
 
-export default function generateInspectPage(shortlink: ShortlinkInfo) {
+export default function generateInspectPage(shortlink: ShortlinkInfo, visits: Visit[]) {
 	const head = generateHead("inspect")
-	const shortlinkInfo = generateShortlinkInfo(shortlink)
+	const shortlinkInfo = generateShortlinkInfo(shortlink, visits)
 	console.log("shortlinkInfo", shortlink)
 
 	return `

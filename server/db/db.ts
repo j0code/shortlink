@@ -52,14 +52,13 @@ export function getShortlink(id: string): Shortlink | null {
 
 export function getShortlinkInfo(id: string): ShortlinkInfo | null {
 	const shortlink = getShortlink(id)
-	const visits = getVisits(id, 10)
 	const visitCount = countVisits(id)
 
 	if (!shortlink) {
 		return null
 	}
 
-	return { ...shortlink, visits, visitCount }
+	return { ...shortlink, visitCount }
 }
 
 export function recordVisit(shortlink_id: string, browser: string | null, os: string | null, cpu: string | null, engine: string | null) {

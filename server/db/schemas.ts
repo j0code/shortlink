@@ -35,5 +35,4 @@ export type VisitCount = v.InferInput<typeof visitCountSchema>
 
 export type ShortlinkInfo = Shortlink & {
 	visitCount: number
-	visits: Visit[]
 }

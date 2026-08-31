@@ -3,7 +3,7 @@ import express from "express"
 import homepage from "./pages/home.ts"
 import inspectPage from "./pages/inspect.ts"
 import { registerResources } from "./api/resources.ts"
-import { getShortlink, getShortlinkInfo, recordVisit } from "./db/db.ts"
+import { getShortlink, getShortlinkInfo, getVisits, recordVisit } from "./db/db.ts"
 import { UserAgent } from "@std/http/user-agent"
 
 console.log("CONFIG", config)
@@ -22,6 +22,7 @@ app.use("/js", express.static(config.clientJsPath))
 app.get("/inspect/:id", (req, res) => {
 	const { id } = req.params
 	const info = getShortlinkInfo(id)
+	const visits = getVisits(id, 10)
 
 
 	if (!info) {
@@ -29,7 +30,7 @@ app.get("/inspect/:id", (req, res) => {
 		return
 	}
 
-	res.status(200).send(inspectPage(info))
+	res.status(200).send(inspectPage(info, visits))
 })
 
 app.get("/:id", (req, res, next) => {
