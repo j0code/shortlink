@@ -1,0 +1,12 @@
+@media (prefers-color-scheme: light) {
+	:root {
+		--background-primary: #a0a0a0;
+		--background-secondary: #ffffff;
+		--text-color: #000000;
+		--input-background: #909090;
+		--input-text-color: #ffffff;
+		--button-background: #c0c0c0;
+		--footer-text-color: #909090;
+		--radio-check-background: #404040;
+	}
+}

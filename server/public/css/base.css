@@ -29,6 +29,7 @@ body {
 	border-radius: 10px;
 	padding: 20px;
 	gap: 15px;
+	box-shadow: 5px 5px 5px 0px #00000060;
 }
 
 main {
@@ -60,14 +61,36 @@ label, p {
 	gap: 10px;
 }
 
-input:not([type="radio"]) {
+input {
 	background-color: var(--input-background);
-	color: var(--input-text-color);
 	border: none;
+}
+
+input:not([type="radio"]) {
+	color: var(--input-text-color);
 	border-radius: 10px;
+	width: 200px;
 	height: 28px;
 	padding: 10px;
-	width: 200px;
+}
+
+input[type="radio"] {
+	margin: 0px;
+	appearance: none;
+	width: 1.2em;
+	height: 1.2em;
+	border-radius: 100%;
+	cursor: pointer;
+
+	&:checked::before {
+		content: "";
+		width: 0.6em;
+		height: 0.6em;
+		background-color: var(--radio-check-background);
+		display: block;
+		translate: calc(0.6em - 50%) calc(0.6em - 50%);
+		border-radius: 100%;
+	}
 }
 
 button {

@@ -2,3 +2,4 @@
 @import "reset.css" layer(reset);
 @import "base.css" layer(base);
 @import "theme/dark.css" layer(theme);
+@import "theme/light.css" layer(theme);
