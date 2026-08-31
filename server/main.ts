@@ -17,6 +17,8 @@ app.get("/", (_req, res) => {
 	res.status(200).send(homepage)
 })
 
+app.use("/js", express.static(config.clientJsPath))
+
 app.get("/inspect/:id", (req, res) => {
 	const { id } = req.params
 	const info = getShortlinkInfo(id)

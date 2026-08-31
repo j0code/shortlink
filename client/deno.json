@@ -1,0 +1,9 @@
+{
+	"name": "@j0code/shortlink-client",
+	"version": "0.0.1",
+	"exports": {},
+	"tasks": {
+		"build": "tsc",
+		"dev": "tsc --watch"
+	}
+}

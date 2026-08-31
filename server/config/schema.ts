@@ -6,7 +6,8 @@ export type Config = {
 	branding: {
 		name: string
 	},
-	baseUrl: string
+	baseUrl: string,
+	clientJsPath: string
 }
 
 const initial: Config = {
@@ -15,7 +16,8 @@ const initial: Config = {
 	branding: {
 		name: "Shortlink"
 	},
-	baseUrl: "http://localhost:3000"
+	baseUrl: "http://localhost:3000",
+	clientJsPath: "../client/dist"
 }
 
 const ConfigSchema = v.looseObject({
@@ -24,7 +26,8 @@ const ConfigSchema = v.looseObject({
 	branding: v.optional(v.looseObject({
 		name: v.optional(v.string(), initial.branding.name)
 	}), initial.branding),
-	baseUrl: v.optional(v.pipe(v.string(), v.url()), initial.baseUrl)
+	baseUrl: v.optional(v.pipe(v.string(), v.url()), initial.baseUrl),
+	clientJsPath: v.optional(v.string(), initial.clientJsPath)
 })
 
 export function parse(obj: unknown) {

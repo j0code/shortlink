@@ -1,4 +1,4 @@
-import "./copyable.js"
+import "./copyable.ts"
 
 const timeElements = document.querySelectorAll("time")
 
