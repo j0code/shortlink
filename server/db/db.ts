@@ -2,7 +2,8 @@ import Database from "better-sqlite3"
 import { readFile, mkdir } from "node:fs/promises"
 import * as v from "@valibot/valibot"
 import { type Shortlink, type ShortlinkInfo, shortlinkSchema, type Visit, visitCountSchema, visitSchema } from "./schemas.ts"
-import { DB_PATH, INIT_SQL_PATH, STORAGE_DIR } from "../constants.ts";
+import { DB_PATH, INIT_SQL_PATH, STORAGE_DIR } from "../constants.ts"
+import { isoDateToMs, normalizeIsoDate, now } from "../time.ts"
 
 const initSql = await readFile(INIT_SQL_PATH, "utf-8")
 console.log("initSql", initSql)
@@ -15,15 +16,17 @@ db.pragma('journal_mode = WAL')
 db.exec(initSql)
 
 const queries = {
-	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url) VALUES (@id, @url)"),
+	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url, created_at, expires_at) VALUES (@id, @url, @created_at, @expires_at)"),
 	getShortlink: db.prepare("SELECT * FROM shortlinks WHERE id = @id"),
-	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine) VALUES (@shortlink_id, @browser, @os, @cpu, @engine)"),
+	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine, visited_at) VALUES (@shortlink_id, @browser, @os, @cpu, @engine, @visited_at)"),
 	getVisits: db.prepare("SELECT * FROM visits WHERE shortlink_id = @shortlink_id ORDER BY visited_at DESC LIMIT @limit"),
 	countVisits: db.prepare("SELECT COUNT(*) as count FROM visits WHERE shortlink_id = @shortlink_id"),
 }
 
-export function createShortlink(id: string, url: string) {
-	queries.insertShortlink.run({ id, url })
+export function createShortlink(id: string, url: string, expires_at: string | null) {
+	expires_at = normalizeIsoDate(expires_at)
+	console.log("expires_at:", expires_at)
+	queries.insertShortlink.run({ id, url, created_at: now(), expires_at })
 }
 
 export function getShortlink(id: string): Shortlink | null {
@@ -33,7 +36,18 @@ export function getShortlink(id: string): Shortlink | null {
 		return null
 	}
 
-	return parse(shortlinkSchema, "shortlink", data)
+	const shortlink = parse(shortlinkSchema, "shortlink", data)
+	if (!shortlink) {
+		return null
+	}
+
+	const expiresAt = isoDateToMs(shortlink.expires_at)
+
+	if (expiresAt && expiresAt < Date.now()) {
+		return null
+	}
+
+	return shortlink
 }
 
 export function getShortlinkInfo(id: string): ShortlinkInfo | null {
@@ -49,7 +63,7 @@ export function getShortlinkInfo(id: string): ShortlinkInfo | null {
 }
 
 export function recordVisit(shortlink_id: string, browser: string | null, os: string | null, cpu: string | null, engine: string | null) {
-	queries.insertVisit.run({ shortlink_id, browser, os, cpu, engine })
+	queries.insertVisit.run({ shortlink_id, browser, os, cpu, engine, visited_at: now() })
 }
 
 export function getVisits(shortlink_id: string, limit: number): Visit[] {

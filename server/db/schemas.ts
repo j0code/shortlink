@@ -5,8 +5,12 @@ export const shortlinkSchema = v.object({
 	url: v.string(),
 	created_at: v.pipe(
 		v.string(),
-		v.isoDateTimeSecond(),
+		v.isoTimestamp(),
 	),
+	expires_at: v.nullable(v.pipe(
+		v.string(),
+		v.isoTimestamp(),
+	)),
 })
 
 export const visitSchema = v.object({
@@ -17,7 +21,7 @@ export const visitSchema = v.object({
 	engine: v.nullable(v.string()),
 	visited_at: v.pipe(
 		v.string(),
-		v.isoDateTimeSecond(),
+		v.isoTimestamp(),
 	),
 })
 

@@ -6,8 +6,9 @@ export default class API {
 		this.baseUrl = baseUrl
 	}
 
-	createShortlink(url: string) {
-		return post(this.baseUrl, "/api/v0/shortlinks", { url })
+	createShortlink(url: string, expiresAt: Temporal.Instant | null = null) {
+		const expires_at = expiresAt ? expiresAt.toString() : null
+		return post(this.baseUrl, "/api/v0/shortlinks", { url, expires_at })
 	}
 
 }

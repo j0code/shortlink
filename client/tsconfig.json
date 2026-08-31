@@ -10,7 +10,7 @@
     "module": "esnext",
     "target": "esnext",
     "types": [],
-	"lib": ["DOM"],
+	"lib": ["DOM", "ESNext.Temporal"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

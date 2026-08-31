@@ -51,7 +51,7 @@ label, p {
 	gap: 10px;
 }
 
-input {
+input:not([type="radio"]) {
 	background-color: var(--input-background);
 	color: var(--input-text-color);
 	border: none;

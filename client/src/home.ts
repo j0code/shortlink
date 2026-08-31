@@ -11,12 +11,19 @@ createForm.addEventListener("submit", async event => {
 
 	const formData = new FormData(createForm)
 	const url = formData.get("url") as string
-	const result = await api.createShortlink(url)
+	const expires = formData.get("expires") as string
+	const expiresAt = expires === "never" ? null : Temporal.Now.zonedDateTimeISO().add(Temporal.Duration.from(expires)).toInstant()
+	const result = await api.createShortlink(url, expiresAt)
 
-	const shortlinkOutput = createForm.elements.namedItem("shortlink") as HTMLInputElement
+	if (!result.success) {
+		alert(`${result.error}\n${result.details}`)
+		return
+	}
+
+	const shortlinkOutput   = createForm.elements.namedItem("shortlink")   as HTMLInputElement
 	const shortlinkIdOutput = createForm.elements.namedItem("shortlinkId") as HTMLInputElement
 
-	shortlinkOutput.value = new URL(result.result.id, api.baseUrl).href
+	shortlinkOutput.value   = new URL(result.result.id, api.baseUrl).href
 	shortlinkIdOutput.value = result.result.id
 })
 

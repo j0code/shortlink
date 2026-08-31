@@ -36,12 +36,12 @@ export default class CreateShortlink extends APIResource {
 			return error("Failed to generate unique hash", 500)
 		}
 
-		console.log(url, hash)
+		console.log("Creating shortlink:", url, hash)
 
-		createShortlink(hash!, url)
+		createShortlink(hash!, url, result.output.expires_at)
 		const shortlink = getShortlink(hash!)
 
-		console.log(shortlink)
+		console.log("shortlink:", shortlink)
 
 		return success({ id: hash })
 	}
@@ -52,7 +52,11 @@ const schema = v.object({
 	url: v.pipe(
 		v.string(),
 		v.url("Invalid URL"),
-	)
+	),
+	expires_at: v.nullable(v.pipe(
+		v.string(),
+		v.isoTimestamp(),
+	))
 })
 
 function generateHash(): string {
