@@ -1,0 +1,8 @@
+{
+	"name": "@j0code/shortlink-components",
+	"version": "0.0.1",
+	"exports": {
+		".": "./components.ts",
+		"./footer": "./Footer.ts"
+	}
+}

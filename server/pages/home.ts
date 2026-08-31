@@ -1,9 +1,8 @@
 import config from "../config/config.ts"
-import CreateShortlinkForm from "../components/CreateShortlinkForm.ts"
-import InspectShortlinkForm from "../components/InspectShortlinkForm.ts"
-import { generateHead } from "../components/Head.ts"
-import Footer from "../components/Footer.ts"
+import { CreateShortlinkForm, InspectShortlinkForm, generateHead, generateFooter } from "@j0code/shortlink-components"
+import info from "../package_info.ts"
 
+const footer = generateFooter(info)
 const branding = config.branding
 
 const page = `
@@ -19,7 +18,7 @@ ${generateHead("home")}
 			<div class="divider"></div>
 			${InspectShortlinkForm}
 		</main>
-		${Footer}
+		${footer}
 	</div>
 </body>
 </html>

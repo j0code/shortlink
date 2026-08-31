@@ -1,11 +1,13 @@
-import Footer from "../components/Footer.ts"
-import { generateHead } from "../components/Head.ts"
-import { generateShortlinkInfo } from "../components/ShortlinkInfo.ts"
+import { generateHead, generateShortlinkInfo, generateFooter } from "@j0code/shortlink-components"
 import type { ShortlinkInfo, Visit } from "../db/schemas.ts"
+import info from "../package_info.ts"
+import config from "../config/config.ts"
+
+const footer = generateFooter(info)
 
 export default function generateInspectPage(shortlink: ShortlinkInfo, visits: Visit[]) {
 	const head = generateHead("inspect")
-	const shortlinkInfo = generateShortlinkInfo(shortlink, visits)
+	const shortlinkInfo = generateShortlinkInfo(config.baseUrl, shortlink, visits)
 	console.log("shortlinkInfo", shortlink)
 
 	return `
@@ -18,7 +20,7 @@ export default function generateInspectPage(shortlink: ShortlinkInfo, visits: Vi
 			<main>
 				${shortlinkInfo}
 			</main>
-			${Footer}
+			${footer}
 		</div/
 	</body>
 </html>

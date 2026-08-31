@@ -2,12 +2,21 @@ body {
 	display: flex;
 	flex-direction: column;
 	color: var(--text-color);
-	background: var(--background-primary);
+	background: var(--background-secondary);
 	width: 100vw;
 	height: 100vh;
 	align-items: center;
 	justify-content: center;
 	font-family: Helvetica, Arial, sans-serif;
+	overflow: visible;
+}
+
+#card {
+	display: flex;
+	flex-direction: column;
+	border-radius: 10px;
+	padding: 20px;
+	gap: 15px;
 }
 
 * {
@@ -20,24 +29,13 @@ body {
 	}
 }
 
-#card {
-	background: var(--background-secondary);
-	display: flex;
-	flex-direction: column;
-	width: min(60vw, 700px);
-	height: max(80vh, 10px);
-	border-radius: 10px;
-	padding: 20px;
-	gap: 15px;
-	box-shadow: 5px 5px 5px 0px #00000060;
-}
-
 main {
 	display: flex;
 	flex-direction: column;
 	overflow-y: auto;
 	scrollbar-gutter: stable;
 	gap: 15px;
+	font-size: 16px !important;
 }
 
 h1 {
@@ -62,36 +60,8 @@ label, p {
 	gap: 10px;
 }
 
-input {
-	background-color: var(--input-background);
-	border: none;
-}
-
-input:not([type="radio"]) {
-	color: var(--input-text-color);
-	border-radius: 10px;
-	width: 200px;
-	height: 28px;
-	padding: 10px;
-}
-
-input[type="radio"] {
-	margin: 0px;
-	appearance: none;
-	width: 1.2em;
-	height: 1.2em;
-	border-radius: 100%;
-	cursor: pointer;
-
-	&:checked::before {
-		content: "";
-		width: 0.6em;
-		height: 0.6em;
-		background-color: var(--radio-check-background);
-		display: block;
-		translate: calc(0.6em - 50%) calc(0.6em - 50%);
-		border-radius: 100%;
-	}
+output {
+	color: var(--text-color);
 }
 
 button {
@@ -109,10 +79,6 @@ button {
 		box-shadow: none;
 		transform: translate(2px, 2px);
 	}
-}
-
-output {
-	color: var(--text-color);
 }
 
 .divider {
@@ -134,18 +100,18 @@ output {
 	}
 }
 
-table {
-	width: 100%;
-
-	td {
-		text-align: center;
-	}
-}
-
 footer {
 	color: var(--footer-text-color);
 	display: flex;
 	flex: 1 0 auto;
 	align-items: end;
 	justify-content: space-between;
+}
+
+#error-info {
+	min-width: 400px;
+
+	> #error {
+		color: #d04060;
+	}
 }

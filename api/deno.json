@@ -1,0 +1,7 @@
+{
+	"name": "@j0code/shortlink-api",
+	"version": "0.0.1",
+	"exports": {
+		".": "./api.ts"
+	}
+}

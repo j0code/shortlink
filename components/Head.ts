@@ -1,4 +1,4 @@
-import config from "../config/config.ts"
+import config from "../server/config/config.ts"
 
 const branding = config.branding
 

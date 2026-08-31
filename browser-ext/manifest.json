@@ -1,0 +1,33 @@
+{
+	"manifest_version": 3,
+	"name": "Shortlink",
+	"version": "0.0.1",
+	"description": "link shortener with no limits",
+	"permissions": [
+		"contextMenus",
+		"activeTab",
+		"storage",
+		"tabs"
+	],
+	"background": {
+		"service_worker": "build/sw.js",
+		"type": "module"
+	},
+	"action": {
+		"default_popup": "popup.html",
+		"default_title": "Shortlink"
+	},
+	"icons": {
+		
+	},
+	"web_accessible_resources": [
+		{
+			"resources": [
+				"css/popup.css"
+			],
+			"matches": [
+				"<all_urls>"
+			]
+		}
+	]
+}

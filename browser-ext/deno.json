@@ -1,0 +1,19 @@
+{
+	"name": "@j0code/shortlink-browser-ext",
+	"version": "0.0.1",
+	"exports": {},
+	"tasks": {
+		"build": "deno bundle --outdir build --code-splitting sw.ts popup.ts",
+		"dev": "deno bundle --outdir build --code-splitting sw.ts popup.ts --watch"
+	},
+	"compilerOptions": {
+		"lib": [
+			"deno.ns",
+			"esnext",
+			"dom"
+		]
+	},
+	"imports": {
+		"@bpev/bext": "jsr:@bpev/bext@1.4.2"
+	}
+}

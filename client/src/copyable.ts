@@ -1,12 +1,14 @@
-const copyables = document.querySelectorAll(".copyable") as NodeListOf<HTMLElement>
+export function installEventListeners() {
+	const copyables = document.querySelectorAll(".copyable") as NodeListOf<HTMLElement>
 
-copyables.forEach(copyable => {
-	if (copyable.tagName != "A") copyable.addEventListener("click", copyValue(copyable))
-	copyable.addEventListener("keydown", copyValueOnKey(copyable))
+	copyables.forEach(copyable => {
+		if (copyable.tagName != "A") copyable.addEventListener("click", copyValue(copyable))
+		copyable.addEventListener("keydown", copyValueOnKey(copyable))
 
-	copyable.tabIndex = 0
-	copyable.title = "Press space to copy."
-})
+		copyable.tabIndex = 0
+		copyable.title = "Press space to copy."
+	})
+}
 
 function copyValue(outputElem: HTMLElement) {
 	return (event: Event) => {

@@ -1,10 +1,9 @@
-import config from "../config/config.ts";
-import type {  ShortlinkInfo, Visit } from "../db/schemas.ts"
+import type {  ShortlinkInfo, Visit } from "../server/db/schemas.ts"
 
-export function generateShortlinkInfo(shortlink: ShortlinkInfo, visits: Visit[]) {
+export function generateShortlinkInfo(baseUrl: string, shortlink: ShortlinkInfo, visits: Visit[]) {
 	const createdAt = new Date(shortlink.created_at).toISOString()
 	const expiresAt = shortlink.expires_at ? new Date(shortlink.expires_at).toISOString() : null
-	const shortlinkUrl = new URL(shortlink.id, config.baseUrl).toString()
+	const shortlinkUrl = new URL(shortlink.id, baseUrl).toString()
 	console.log(shortlink)
 
 	return `

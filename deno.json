@@ -1,13 +1,15 @@
 {
 	"name": "@j0code/shortlink",
-	"version": "0.0.1",
 	"exports": {},
 	"tasks": {
 
 	},
 	"workspace": [
 		"./server",
-		"./client"
+		"./client",
+		"./browser-ext",
+		"./components",
+		"./api"
 	],
 	"fmt": {
 		"semiColons": false

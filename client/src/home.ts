@@ -1,5 +1,5 @@
 import API from "./api.ts"
-import "./copyable.ts"
+import { installEventListeners } from "./copyable.ts"
 
 const createForm  = document.querySelector("#create-shortlink")  as HTMLFormElement
 const inspectForm = document.querySelector("#inspect-shortlink") as HTMLFormElement
@@ -35,3 +35,5 @@ inspectForm.addEventListener("submit", event => {
 
 	location.href = `/inspect/${id}`
 })
+
+installEventListeners()

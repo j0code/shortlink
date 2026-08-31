@@ -1,7 +1,9 @@
 {
 	"name": "@j0code/shortlink-client",
 	"version": "0.0.1",
-	"exports": {},
+	"exports": {
+		"./copyable": "./src/copyable.ts"
+	},
 	"tasks": {
 		"build": "tsc",
 		"dev": "tsc --watch"
