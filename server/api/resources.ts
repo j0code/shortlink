@@ -3,10 +3,12 @@ import type APIResource from "./APIResource.ts"
 import type { APIResponse, Method } from "./types.ts"
 import CreateShortlink from "./CreateShortlink.ts"
 import GetShortlink from "./GetShortlink.ts"
+import GetVisits from "./GetVisits.ts"
 
 const resources: APIResource[] = [
 	new CreateShortlink(),
-	new GetShortlink()
+	new GetShortlink(),
+	new GetVisits()
 ]
 
 export function registerResources(app: Application) {
