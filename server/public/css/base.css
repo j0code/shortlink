@@ -111,10 +111,6 @@ button {
 
 output {
 	color: var(--text-color);
-
-	&:hover, &:focus-visible {
-		outline-style: dashed;
-	}
 }
 
 .divider {
@@ -130,6 +126,10 @@ output {
 	padding-inline: 10px;
 	padding-block: 5px;
 	cursor: pointer;
+	
+	&:hover, &:focus-visible {
+		outline-style: dashed;
+	}
 }
 
 table {

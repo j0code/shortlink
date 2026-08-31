@@ -33,5 +33,5 @@ inspectForm.addEventListener("submit", event => {
 	const formData = new FormData(inspectForm)
 	const id = formData.get("id") as string
 
-	location.replace(`/inspect/${id}`)
+	location.href = `/inspect/${id}`
 })
