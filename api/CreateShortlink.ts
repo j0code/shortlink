@@ -3,6 +3,7 @@ import * as v from "@valibot/valibot"
 import { createShortlink, getShortlink } from "../db/db.ts"
 import { error, success } from "./types.ts"
 import { encodeBase64 } from "@std/encoding/base64"
+import { ILLEGAL_IDS } from "../constants.ts"
 
 export default class CreateShortlink extends APIResource {
 
@@ -26,7 +27,7 @@ export default class CreateShortlink extends APIResource {
 		for (let i = 0; i < 3; i++) {
 			hash = generateHash()
 			const existing = getShortlink(hash)
-			if (!existing) {
+			if (!existing && !isIllegalId(hash)) {
 				found = true
 				break
 			}
@@ -58,4 +59,13 @@ function generateHash(): string {
 	const buffer = new Uint8Array(9)
 	crypto.getRandomValues(buffer)
 	return encodeBase64(buffer)
+}
+
+function isIllegalId(id: string): boolean {
+	for (const illegalId of ILLEGAL_IDS) {
+		if (id.startsWith(illegalId)) {
+			return true
+		}
+	}
+	return false	
 }

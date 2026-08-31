@@ -2,13 +2,14 @@ import Database from "better-sqlite3"
 import { readFile, mkdir } from "node:fs/promises"
 import * as v from "@valibot/valibot"
 import { type Shortlink, type ShortlinkInfo, shortlinkSchema, type Visit, visitCountSchema, visitSchema } from "./schemas.ts"
+import { DB_PATH, INIT_SQL_PATH, STORAGE_DIR } from "../constants.ts";
 
-const initSql = await readFile("./queries/init.sql", "utf-8")
+const initSql = await readFile(INIT_SQL_PATH, "utf-8")
 console.log("initSql", initSql)
 
-await mkdir("./storage", { recursive: true })
+await mkdir(STORAGE_DIR, { recursive: true })
 
-const db = new Database("./storage/shortlinks.db")
+const db = new Database(DB_PATH)
 
 db.pragma('journal_mode = WAL')
 db.exec(initSql)
