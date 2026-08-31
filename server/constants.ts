@@ -4,5 +4,7 @@ export const INIT_SQL_PATH = "./queries/init.sql"
 
 export const ILLEGAL_IDS = [
 	"api",
-	"inspect"
+	"inspect",
+	"js",
+	"css"
 ]
