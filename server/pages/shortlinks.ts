@@ -5,10 +5,10 @@ import config from "../config/config.ts"
 
 const footer = generateFooter(info)
 
-export default function inspectPage(shortlink: ShortlinkInfo, visits: Visit[]) {
+export default function userShortlinksPage(shortlinks: ShortlinkInfo[]) {
 	const head = generateHead("inspect")
-	const shortlinkInfo = generateShortlinkInfo(config.baseUrl, shortlink, visits)
-	console.log("shortlinkInfo", shortlink)
+	//const shortlinkInfo = generateShortlinkInfo(config.baseUrl, shortlink, visits)
+	console.log("shortlinks", shortlinks)
 
 	return `
 <!DOCTYPE html>
@@ -16,9 +16,9 @@ export default function inspectPage(shortlink: ShortlinkInfo, visits: Visit[]) {
 	${head}
 	<body>
 		<div id="card">
-			<h1>Inspect Shortlink</h1>
+			<h1>My Shortlinks</h1>
 			<main>
-				${shortlinkInfo}
+				
 			</main>
 			${footer}
 		</div/

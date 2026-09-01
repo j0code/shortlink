@@ -1,4 +1,4 @@
-import { installEventListeners } from "./copyable.ts"
+import { installEventListeners } from "./copyable"
 
 const timeElements = document.querySelectorAll("time")
 

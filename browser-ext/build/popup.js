@@ -87,27 +87,51 @@ var mod_default = browserAPI;
 // ../api/api.ts
 var API = class {
   baseUrl;
+  auth;
   constructor(baseUrl) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = baseUrl, this.auth = null;
   }
-  createShortlink(url, expiresAt = null) {
+  async login(id, password) {
+    this.auth = `user ${id}:${await getKey(password)}`;
+  }
+  setToken(token) {
+    this.auth = `token ${token}`;
+  }
+  async createUser(password) {
+    const key = await getKey(password);
+    return post(this.baseUrl, "/api/v0/users", this.auth, {
+      key
+    });
+  }
+  createShortlink(url, claim, expiresAt = null) {
     const expires_at = expiresAt ? expiresAt.toString() : null;
-    return post(this.baseUrl, "/api/v0/shortlinks", {
+    return post(this.baseUrl, "/api/v0/shortlinks", this.auth, {
       url,
+      claim,
       expires_at
     });
   }
 };
-function post(baseUrl, route, payload) {
+function post(baseUrl, route, auth, payload) {
   console.log("payload", payload);
   const url = new URL(route, baseUrl);
+  const headers = {
+    "Content-Type": "application/json"
+  };
+  if (auth) {
+    console.log("auth", auth);
+    headers["Authorization"] = auth;
+  }
   return fetch(url, {
     method: "POST",
     body: JSON.stringify(payload),
-    headers: {
-      "Content-Type": "application/json"
-    }
+    headers
   }).then((res) => res.json());
+}
+async function getKey(password) {
+  const pw = new TextEncoder().encode(password);
+  const digest = await crypto.subtle.digest("sha-256", pw);
+  return new Uint8Array(digest).toHex();
 }
 
 // constants.ts

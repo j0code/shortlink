@@ -1,36 +1,71 @@
 export default class API {
 
-	baseUrl: string
+	readonly baseUrl: string
+	private auth: string | null
 
 	constructor(baseUrl: string) {
-		this.baseUrl = baseUrl
+		this.baseUrl = baseUrl,
+		this.auth = null
 	}
 
-	createShortlink(url: string, expiresAt: Temporal.Instant | null = null) {
+	async login(id: string, password: string) {
+		this.auth = `user ${id}:${await getKey(password)}`
+	}
+
+	setToken(token: string) {
+		this.auth = `token ${token}`
+	}
+
+	async createUser(password: string) {
+		const key = await getKey(password)
+		return post(this.baseUrl, "/api/v0/users", this.auth, { key })
+	}
+
+	createShortlink(url: string, claim: boolean, expiresAt: Temporal.Instant | null = null) {
 		const expires_at = expiresAt ? expiresAt.toString() : null
-		return post(this.baseUrl, "/api/v0/shortlinks", { url, expires_at }) as Promise<APIResponse<{ id: string }>>
+		return post(this.baseUrl, "/api/v0/shortlinks", this.auth, { url, claim, expires_at }) as Promise<APIResponse<{ id: string }>>
 	}
 
 }
 
 
-function get(baseUrl: string, route: string) {
+function get(baseUrl: string, route: string, auth: string | null) {
 	const url = new URL(route, baseUrl)
+	const headers: HeadersInit = {}
+
+	if (auth) {
+		headers["Authorization"] = auth
+	}
+
 	return fetch(url, {
 		method: "GET",
+		headers
 	}).then(res => res.json())
 }
 
-function post(baseUrl: string, route: string, payload: unknown) {
+function post(baseUrl: string, route: string, auth: string | null, payload: unknown) {
 	console.log("payload", payload)
 	const url = new URL(route, baseUrl)
+	const headers: HeadersInit = {
+		"Content-Type": "application/json"
+	}
+
+	if (auth) {
+		console.log("auth", auth)
+		headers["Authorization"] = auth
+	}
+
 	return fetch(url, {
 		method: "POST",
 		body: JSON.stringify(payload),
-		headers: {
-			"Content-Type": "application/json"
-		}
+		headers
 	}).then(res => res.json())
+}
+
+async function getKey(password: string) {
+	const pw = new TextEncoder().encode(password)
+	const digest = await crypto.subtle.digest("sha-256", pw)
+	return new Uint8Array(digest).toHex()
 }
 
 export type APIResponse<T = unknown> = {

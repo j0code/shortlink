@@ -17,7 +17,7 @@ const initial: Config = {
 		name: "Shortlink"
 	},
 	baseUrl: "http://localhost:3000",
-	clientJsPath: "../client/dist"
+	clientJsPath: "../client/build"
 }
 
 const ConfigSchema = v.looseObject({

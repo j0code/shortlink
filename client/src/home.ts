@@ -1,4 +1,4 @@
-import API from "./api.ts"
+import API from "@j0code/shortlink-api"
 import { installEventListeners } from "./copyable.ts"
 
 const createForm  = document.querySelector("#create-shortlink")  as HTMLFormElement
@@ -13,7 +13,7 @@ createForm.addEventListener("submit", async event => {
 	const url = formData.get("url") as string
 	const expires = formData.get("expires") as string
 	const expiresAt = expires === "never" ? null : Temporal.Now.zonedDateTimeISO().add(Temporal.Duration.from(expires)).toInstant()
-	const result = await api.createShortlink(url, expiresAt)
+	const result = await api.createShortlink(url, true, expiresAt)
 
 	if (!result.success) {
 		alert(`${result.error}\n${result.details}`)
@@ -37,3 +37,5 @@ inspectForm.addEventListener("submit", event => {
 })
 
 installEventListeners()
+
+globalThis.api = api

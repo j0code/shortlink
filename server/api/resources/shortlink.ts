@@ -1,7 +1,7 @@
-import APIResource from "./APIResource.ts"
-import { getShortlinkInfo } from "../db/db.ts"
-import { error, success } from "./types.ts"
-import type { Params } from "./types.ts"
+import APIResource from "../APIResource.ts"
+import { getShortlinkInfo } from "../../db/db.ts"
+import { error, success } from "../types.ts"
+import type { Params } from "../types.ts"
 
 export default class GetShortlink extends APIResource {
 

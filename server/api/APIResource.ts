@@ -1,3 +1,4 @@
+import { User } from "../db/schemas.ts"
 import type { APIResponse, Method, Params } from "./types.ts"
 
 export default abstract class APIResource {
@@ -10,11 +11,11 @@ export default abstract class APIResource {
 		this.supportedMethods = new Set(supportedMethods)
 	}
 
-	get(body: unknown, params: Params):  APIResponse {
+	get(body: unknown, params: Params, user: User | null):  APIResponse {
 		throw new Error(`GET not implemented on ${this.route}`)
 	}
 
-	post(body: unknown, params: Params): APIResponse {
+	post(body: unknown, params: Params, user: User | null): APIResponse {
 		throw new Error(`POST not implemented on ${this.route}`)
 	}
 

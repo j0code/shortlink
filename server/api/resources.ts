@@ -1,14 +1,17 @@
 import type { Application, Request, Response } from "express"
 import type APIResource from "./APIResource.ts"
 import type { APIResponse, Method } from "./types.ts"
-import CreateShortlink from "./CreateShortlink.ts"
-import GetShortlink from "./GetShortlink.ts"
-import GetVisits from "./GetVisits.ts"
+import users from "./resources/users.ts"
+import shortlinks from "./resources/shortlinks.ts"
+import shortlink from "./resources/shortlink.ts"
+import visits from "./resources/visits.ts"
+import { apiAuth } from "../auth.ts"
 
 const resources: APIResource[] = [
-	new CreateShortlink(),
-	new GetShortlink(),
-	new GetVisits()
+	new users(),
+	new shortlinks(),
+	new shortlink(),
+	new visits()
 ]
 
 export function registerResources(app: Application) {
@@ -17,8 +20,11 @@ export function registerResources(app: Application) {
 			const lowerMethod = method.toLowerCase() as Lowercase<Method>
 
 			app[lowerMethod](resource.route, async (req, res) => {
+				const user = apiAuth(req.headers.authorization, req.headers.cookie)
+				console.log("user:", user)
+
 				try {
-					const result = await resource[lowerMethod](req.body, req.params)
+					const result = await resource[lowerMethod](req.body, req.params, user)
 					cors(req, res)
 					res.status(result.status).send(result)
 				} catch (err) {
@@ -39,6 +45,6 @@ function cors(req: Request, res: Response) {
 	const origin = req.headers.origin
 	if (origin) res.appendHeader("Access-Control-Allow-Origin", origin)
 	else res.appendHeader("Access-Control-Allow-Origin", "*")
-	res.appendHeader("Access-Control-Allow-Headers", "Content-Type")
+	res.appendHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
 	return
 }

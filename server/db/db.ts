@@ -1,7 +1,7 @@
-import Database from "better-sqlite3"
+import Database, { type Statement } from "better-sqlite3"
 import { readFile, mkdir } from "node:fs/promises"
 import * as v from "@valibot/valibot"
-import { type Shortlink, type ShortlinkInfo, shortlinkSchema, type Visit, visitCountSchema, visitSchema } from "./schemas.ts"
+import { type Shortlink, type ShortlinkInfo, shortlinkSchema, userSchema, type Visit, visitCountSchema, visitSchema } from "./schemas.ts"
 import { DB_PATH, INIT_SQL_PATH, STORAGE_DIR } from "../constants.ts"
 import { isoDateToMs, normalizeIsoDate, now } from "../time.ts"
 
@@ -16,27 +16,32 @@ db.pragma('journal_mode = WAL')
 db.exec(initSql)
 
 const queries = {
-	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url, created_at, expires_at) VALUES (@id, @url, @created_at, @expires_at)"),
+	insertUser: db.prepare("INSERT INTO users (id, key, created_at) VALUES (@id, @key, @created_at)"),
+	getUser: db.prepare("SELECT * FROM users WHERE id = @id"),
+	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url, owner_id, created_at, expires_at) VALUES (@id, @url, @owner_id, @created_at, @expires_at)"),
 	getShortlink: db.prepare("SELECT * FROM shortlinks WHERE id = @id"),
+	//getShortlinksFor: db.prepare("SELECT * FROM shortlinks WHERE"),
 	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine, visited_at) VALUES (@shortlink_id, @browser, @os, @cpu, @engine, @visited_at)"),
 	getVisits: db.prepare("SELECT * FROM visits WHERE shortlink_id = @shortlink_id ORDER BY visited_at DESC LIMIT @limit"),
 	countVisits: db.prepare("SELECT COUNT(*) as count FROM visits WHERE shortlink_id = @shortlink_id"),
 }
 
-export function createShortlink(id: string, url: string, expires_at: string | null) {
+export function createUser(id: string, key: string) {
+	queries.insertUser.run({ id, key, created_at: now() })
+}
+
+export function getUser(id: string) {
+	return getAndParse(queries.getUser, { id }, userSchema, "user")
+}
+
+export function createShortlink(id: string, url: string, owner_id: string | null, expires_at: string | null) {
 	expires_at = normalizeIsoDate(expires_at)
-	console.log("expires_at:", expires_at)
-	queries.insertShortlink.run({ id, url, created_at: now(), expires_at })
+	queries.insertShortlink.run({ id, url, owner_id, created_at: now(), expires_at })
 }
 
 export function getShortlink(id: string): Shortlink | null {
-	const data = queries.getShortlink.get({ id })
+	const shortlink = getAndParse(queries.getShortlink, { id }, shortlinkSchema, "shortlink")
 
-	if (!data) {
-		return null
-	}
-
-	const shortlink = parse(shortlinkSchema, "shortlink", data)
 	if (!shortlink) {
 		return null
 	}
@@ -95,4 +100,17 @@ function parse<
 	}
 
 	return result.output
+}
+
+function getAndParse<
+	TEntries extends v.ObjectEntries,
+	TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined
+>(query: Statement, args: unknown, schema: v.ObjectSchema<TEntries, TMessage>, name: string) {
+	const data = query.get(args)
+
+	if (!data) {
+		return null
+	}
+
+	return parse(schema, name, data)
 }
