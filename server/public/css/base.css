@@ -30,6 +30,11 @@ body {
 	padding: 20px;
 	gap: 15px;
 	box-shadow: 5px 5px 5px 0px #00000060;
+
+	&.wide {
+		width: fit-content;
+		max-width: 80vw;
+	}
 }
 
 main {

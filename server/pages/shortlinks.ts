@@ -1,13 +1,11 @@
-import { generateHead, generateShortlinkInfo, generateFooter } from "@j0code/shortlink-components"
-import type { ShortlinkInfo, Visit } from "../db/schemas.ts"
+import { generateHead, generateFooter, UserShortlinksTable } from "@j0code/shortlink-components"
+import type { ShortlinkInfo } from "../db/schemas.ts"
 import info from "../package_info.ts"
-import config from "../config/config.ts"
 
 const footer = generateFooter(info)
 
 export default function userShortlinksPage(shortlinks: ShortlinkInfo[]) {
 	const head = generateHead("inspect")
-	//const shortlinkInfo = generateShortlinkInfo(config.baseUrl, shortlink, visits)
 	console.log("shortlinks", shortlinks)
 
 	return `
@@ -15,13 +13,13 @@ export default function userShortlinksPage(shortlinks: ShortlinkInfo[]) {
 <html lang="en">
 	${head}
 	<body>
-		<div id="card">
+		<div id="card" class="wide">
 			<h1>My Shortlinks</h1>
 			<main>
-				
+				${UserShortlinksTable(shortlinks)}
 			</main>
 			${footer}
-		</div/
+		</div>
 	</body>
 </html>
 	`.trim()

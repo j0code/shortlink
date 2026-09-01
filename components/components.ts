@@ -5,6 +5,7 @@ import { generateHead } from "./Head.ts"
 import { generateFooter } from "./Footer.ts"
 import LoginForm from "./LoginForm.ts"
 import { UserInfo } from "./UserInfo.ts"
+import { UserShortlinksTable } from "./UserShortlinksTable.ts"
 
 export {
 	generateHead,
@@ -14,4 +15,5 @@ export {
 	LoginForm,
 	UserInfo,
 	generateShortlinkInfo,
+	UserShortlinksTable,
 }

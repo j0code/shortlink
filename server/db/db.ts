@@ -20,7 +20,7 @@ const queries = {
 	getUser: db.prepare("SELECT * FROM users WHERE id = @id"),
 	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url, owner_id, created_at, expires_at) VALUES (@id, @url, @owner_id, @created_at, @expires_at)"),
 	getShortlink: db.prepare("SELECT * FROM shortlinks WHERE id = @id"),
-	//getShortlinksFor: db.prepare("SELECT * FROM shortlinks WHERE"),
+	getShortlinksFor: db.prepare("SELECT * FROM shortlinks WHERE owner_id = @owner_id"),
 	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine, visited_at) VALUES (@shortlink_id, @browser, @os, @cpu, @engine, @visited_at)"),
 	getVisits: db.prepare("SELECT * FROM visits WHERE shortlink_id = @shortlink_id ORDER BY visited_at DESC LIMIT @limit"),
 	countVisits: db.prepare("SELECT COUNT(*) as count FROM visits WHERE shortlink_id = @shortlink_id"),
@@ -66,6 +66,18 @@ export function getShortlinkInfo(id: string): ShortlinkInfo | null {
 	return { ...shortlink, visitCount }
 }
 
+export function getShortlinksFor(owner_id: string): Shortlink[] {
+	return getAllAndParse(queries.getShortlinksFor, { owner_id }, shortlinkSchema, "shortlink")
+}
+
+export function getShortlinkInfosFor(owner_id: string): ShortlinkInfo[] {
+	const shortlinks = getShortlinksFor(owner_id)
+	return shortlinks.map(shortlink => {
+		const visitCount = countVisits(shortlink.id)
+		return { ...shortlink, visitCount }
+	})
+}
+
 export function recordVisit(shortlink_id: string, browser: string | null, os: string | null, cpu: string | null, engine: string | null) {
 	queries.insertVisit.run({ shortlink_id, browser, os, cpu, engine, visited_at: now() })
 }
@@ -105,7 +117,7 @@ function parse<
 function getAndParse<
 	TEntries extends v.ObjectEntries,
 	TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined
->(query: Statement, args: unknown, schema: v.ObjectSchema<TEntries, TMessage>, name: string) {
+>(query: Statement, args: unknown, schema: v.ObjectSchema<TEntries, TMessage>, name: string): v.InferOutput<typeof schema> | null {
 	const data = query.get(args)
 
 	if (!data) {
@@ -113,4 +125,20 @@ function getAndParse<
 	}
 
 	return parse(schema, name, data)
+}
+
+function getAllAndParse<
+	TEntries extends v.ObjectEntries,
+	TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined
+>(query: Statement, args: unknown, schema: v.ObjectSchema<TEntries, TMessage>, name: string): v.InferOutput<typeof schema>[] {
+	const data = query.all(args)
+
+	if (!data) {
+		return []
+	}
+
+	const parsed = data.map((row: unknown) => parse(schema, name, row))
+	const filtered = parsed.filter((item: unknown) => item !== null)
+
+	return filtered as v.InferOutput<typeof schema>[]
 }

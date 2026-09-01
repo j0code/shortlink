@@ -3,9 +3,10 @@ import express from "express"
 import homepage from "./pages/home.ts"
 import inspectPage from "./pages/inspect.ts"
 import { registerResources } from "./api/resources.ts"
-import { getShortlink, getShortlinkInfo, getVisits, recordVisit } from "./db/db.ts"
+import { getShortlink, getShortlinkInfo, getShortlinkInfosFor, getVisits, recordVisit } from "./db/db.ts"
 import { UserAgent } from "@std/http/user-agent"
 import { cookieAuth } from "./auth.ts"
+import userShortlinksPage from "./pages/shortlinks.ts"
 
 console.log("CONFIG", config)
 
@@ -49,7 +50,9 @@ app.get("/users/:id/shortlinks", (req, res) => {
 		return
 	}
 
-	res.status(200).send(user)
+	const shortlinks = getShortlinkInfosFor(user.id)
+
+	res.status(200).send(userShortlinksPage(shortlinks))
 })
 
 app.get("/:id", (req, res, next) => {
