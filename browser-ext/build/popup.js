@@ -91,9 +91,6 @@ var API = class {
   constructor(baseUrl) {
     this.baseUrl = baseUrl, this.auth = null;
   }
-  async login(id, password) {
-    this.auth = `user ${id}:${await getKey(password)}`;
-  }
   setToken(token) {
     this.auth = `token ${token}`;
   }

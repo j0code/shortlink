@@ -1,11 +1,15 @@
 import config from "../config/config.ts"
-import { CreateShortlinkForm, InspectShortlinkForm, generateHead, generateFooter } from "@j0code/shortlink-components"
+import { CreateShortlinkForm, InspectShortlinkForm, LoginForm, UserInfo, generateHead, generateFooter } from "@j0code/shortlink-components"
 import info from "../package_info.ts"
+import { User } from "../db/schemas.ts"
 
 const footer = generateFooter(info)
 const branding = config.branding
 
-const page = `
+export default function homepage(user: User | null = null) {
+	const userArea = user ? UserInfo(user) : LoginForm
+
+	return `
 <!DOCTYPE html>
 <html lang="en">
 ${generateHead("home")}
@@ -17,11 +21,12 @@ ${generateHead("home")}
 			${CreateShortlinkForm}
 			<div class="divider"></div>
 			${InspectShortlinkForm}
+			<div class="divider"></div>
+			${userArea}
 		</main>
 		${footer}
 	</div>
 </body>
 </html>
 `.trim()
-
-export default page
+}

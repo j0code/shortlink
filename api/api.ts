@@ -8,10 +8,6 @@ export default class API {
 		this.auth = null
 	}
 
-	async login(id: string, password: string) {
-		this.auth = `user ${id}:${await getKey(password)}`
-	}
-
 	setToken(token: string) {
 		this.auth = `token ${token}`
 	}
@@ -62,7 +58,7 @@ function post(baseUrl: string, route: string, auth: string | null, payload: unkn
 	}).then(res => res.json())
 }
 
-async function getKey(password: string) {
+export async function getKey(password: string) {
 	const pw = new TextEncoder().encode(password)
 	const digest = await crypto.subtle.digest("sha-256", pw)
 	return new Uint8Array(digest).toHex()

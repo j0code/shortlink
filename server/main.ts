@@ -6,7 +6,6 @@ import { registerResources } from "./api/resources.ts"
 import { getShortlink, getShortlinkInfo, getVisits, recordVisit } from "./db/db.ts"
 import { UserAgent } from "@std/http/user-agent"
 import { cookieAuth } from "./auth.ts"
-import { parseCookieHeader } from "./cookies.ts"
 
 console.log("CONFIG", config)
 
@@ -16,11 +15,8 @@ app.use("/api", express.json())
 registerResources(app)
 
 app.get("/", (req, res) => {
-	res.status(200).send(homepage)
-
-	const cookies = parseCookieHeader(req.headers.cookie)
-
-	console.log("cookie:", cookies)
+	const user = cookieAuth(req.headers.cookie)
+	res.status(200).send(homepage(user))
 })
 
 app.use("/js", express.static(config.clientJsPath))

@@ -38,6 +38,10 @@ main {
 	overflow-y: auto;
 	scrollbar-gutter: stable;
 	gap: 15px;
+
+	> div {
+		padding-inline: 20px;
+	}
 }
 
 h1 {
