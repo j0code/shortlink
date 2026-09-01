@@ -11,7 +11,7 @@ export function generateShortlinkInfo(baseUrl: string, shortlink: ShortlinkInfo,
 	<p>Shortlink URL: <a href="${shortlinkUrl}" target="_blank" class="copyable">${shortlinkUrl}</a></p>
 	<p>Target URL: <a href="${shortlink.url}" target="_blank" class="copyable">${shortlink.url}</a></p>
 	<p>Created at: <time datetime="${createdAt}"></time></p>
-	<p>Expires at: <time datetime="${expiresAt ?? ""}"></time></p>
+	<p>Expires at: <span><time datetime="${expiresAt ?? ""}"></time> (<time datetime="${expiresAt ?? ""}" data-relative></time>)</span></p>
 	<p>Visit count: <code>${shortlink.visitCount}</code></p>
 	<div class="divider"></div>
 	<h2>Recent Visits</h2>

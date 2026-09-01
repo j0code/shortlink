@@ -1,4 +1,4 @@
-import { ShortlinkInfo } from "../server/db/schemas.ts"
+import type { ShortlinkInfo } from "../server/db/schemas.ts"
 
 export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 	if (shortlinks.length === 0) {
@@ -15,7 +15,7 @@ export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 	<td>${shortTargetUrl}</td>
 	<td>${shortlink.visitCount}</td>
 	<td><time datetime="${shortlink.created_at}"></time></td>
-	<td><time datetime="${shortlink.expires_at ?? ""}"></time></td>
+	<td><time datetime="${shortlink.expires_at ?? ""}" data-relative></time></td>
 	<td>
 		<a href="/inspect/${shortlink.id}" target="_blank">Inspect</a>
 	</td>
