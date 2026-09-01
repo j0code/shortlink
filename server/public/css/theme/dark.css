@@ -6,7 +6,10 @@
 		--input-background: #0d0d0d;
 		--input-text-color: #e0e0e0;
 		--button-background: #606060;
+		--button-shadow: #282828;
 		--footer-text-color: #909090;
 		--radio-check-background: #d0d0d0;
+		--logout-button-background: oklch(0.4891 0.1669 17.51);
+		--logout-button-shadow: oklch(0.2768 0.1669 17.51);
 	}
 }

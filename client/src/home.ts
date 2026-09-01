@@ -4,6 +4,7 @@ import { installEventListeners } from "./copyable.ts"
 const createForm  = document.querySelector("#create-shortlink")  as HTMLFormElement
 const inspectForm = document.querySelector("#inspect-shortlink") as HTMLFormElement
 const loginForm = document.querySelector("#login") as HTMLFormElement | null
+const shortlinksButton = document.querySelector("#shortlinks-button") as HTMLButtonElement | null
 const logoutButton = document.querySelector("#logout-button") as HTMLButtonElement | null
 
 const api = new API(location.href)
@@ -53,7 +54,7 @@ loginForm?.addEventListener("submit", async event => {
 			alert(`${result.error}\n${result.details}`)
 			return
 		}
-		
+
 		id = result.result.id
 	}
 
@@ -61,6 +62,10 @@ loginForm?.addEventListener("submit", async event => {
 	idInput.value = id
 	
 	location.reload()
+})
+
+shortlinksButton?.addEventListener("click", () => {
+	location.href = "/users/@me/shortlinks"
 })
 
 logoutButton?.addEventListener("click", () => {

@@ -103,6 +103,11 @@ input[type="radio"] {
 	}
 }
 
+.button-row {
+	display: flex;
+	gap: 10px;
+}
+
 button {
 	height: 30px;
 	width: min(100%, 120px);
@@ -110,7 +115,7 @@ button {
 	color: var(--text-color);
 	border: none;
 	border-radius: 10px;
-	box-shadow: 2px 2px 0px 0px #00000060;
+	box-shadow: 2px 2px 0px 0px var(--button-shadow);
 	cursor: pointer;
 	margin-bottom: 2px;
 
@@ -157,4 +162,9 @@ footer {
 	flex: 1 0 auto;
 	align-items: end;
 	justify-content: space-between;
+}
+
+#logout-button {
+	--button-background: var(--logout-button-background);
+	--button-shadow: var(--logout-button-shadow);
 }
