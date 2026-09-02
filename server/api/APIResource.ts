@@ -1,4 +1,4 @@
-import { User } from "../db/schemas.ts"
+import type { User } from "../db/schemas.ts"
 import type { APIResponse, Method, Params } from "./types.ts"
 
 export default abstract class APIResource {

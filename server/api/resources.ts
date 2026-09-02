@@ -25,7 +25,7 @@ export function registerResources(app: Application) {
 
 				try {
 					const result = await resource[lowerMethod](req.body, req.params, user)
-					cors(req, res)
+					headers(req, res, resource)
 					res.status(result.status).send(result)
 				} catch (err) {
 					console.error("ERROR", "Uncaught error:", err)
@@ -35,10 +35,15 @@ export function registerResources(app: Application) {
 		})
 
 		app.options(resource.route, (req, res) => {
-			cors(req, res)
+			headers(req, res, resource)
 			res.status(200).end()
 		})
 	})
+}
+
+function headers(req: Request, res: Response, resource: APIResource) {
+	cors(req, res)
+	res.appendHeader("Allow", resource.supportedMethods.values().toArray().join(", "))
 }
 
 function cors(req: Request, res: Response) {
