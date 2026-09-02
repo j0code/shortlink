@@ -2,7 +2,7 @@ import browserAPI, { isChrome } from "@bpev/bext"
 import API from "@j0code/shortlink-api"
 import { BASE_URL } from "./constants.ts"
 import { generateFooter } from "@j0code/shortlink-components/footer"
-import { installEventListeners } from "@j0code/shortlink-client/copyable"
+import { installCopyEventListeners } from "@j0code/shortlink-client/copyable"
 
 const footer = generateFooter({
 	name: "shortlink",
@@ -27,7 +27,7 @@ if (["https:", "http:"].includes(targetUrl.protocol)) {
 }
 
 async function main() {
-	const response = await api.createShortlink(targetUrl.href)
+	const response = await api.createShortlink(targetUrl.href, false, false, null)
 	if (!response.success) {
 		renderError(response.error, response.details + "")
 		return
@@ -57,7 +57,7 @@ async function main() {
 		})
 	})
 
-	installEventListeners()
+	installCopyEventListeners()
 
 	navigator.clipboard.writeText(url.href)
 }

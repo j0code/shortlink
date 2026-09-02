@@ -100,15 +100,30 @@ var API = class {
       key
     });
   }
-  createShortlink(url, claim, expiresAt = null) {
+  createShortlink(url, claim, restricted, expiresAt = null) {
     const expires_at = expiresAt ? expiresAt.toString() : null;
     return post(this.baseUrl, "/api/v0/shortlinks", this.auth, {
       url,
       claim,
+      restricted,
       expires_at
     });
   }
+  deleteShortlink(id) {
+    return del(this.baseUrl, `/api/v0/shortlinks/${id}`, this.auth);
+  }
 };
+function del(baseUrl, route, auth) {
+  const url = new URL(route, baseUrl);
+  const headers = {};
+  if (auth) {
+    headers["Authorization"] = auth;
+  }
+  return fetch(url, {
+    method: "DELETE",
+    headers
+  }).then((res) => res.json());
+}
 function post(baseUrl, route, auth, payload) {
   console.log("payload", payload);
   const url = new URL(route, baseUrl);
@@ -146,12 +161,12 @@ function generateFooter(info) {
 }
 
 // ../client/src/copyable.ts
-function installEventListeners() {
+function installCopyEventListeners() {
   const copyables = document.querySelectorAll(".copyable");
   copyables.forEach((copyable) => {
     if (copyable.tagName != "A") copyable.addEventListener("click", copyValue(copyable));
     copyable.addEventListener("keydown", copyValueOnKey(copyable));
-    copyable.tabIndex = 0;
+    if (copyable.tagName != "OUTPUT") copyable.tabIndex = 0;
     copyable.title = "Press space to copy.";
   });
 }
@@ -193,7 +208,7 @@ if ([
   renderError("Unable to generate shortlink", "This page is privileged and therefore cannot be shortened.");
 }
 async function main() {
-  const response = await api.createShortlink(targetUrl.href);
+  const response = await api.createShortlink(targetUrl.href, false, false, null);
   if (!response.success) {
     renderError(response.error, response.details + "");
     return;
@@ -219,7 +234,7 @@ async function main() {
       url: inspectUrl.href
     });
   });
-  installEventListeners();
+  installCopyEventListeners();
   navigator.clipboard.writeText(url.href);
 }
 function renderPage(content) {
