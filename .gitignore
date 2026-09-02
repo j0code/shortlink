@@ -1,3 +1,4 @@
 storage
 config.yson
 client/build
+browser-ext/build
