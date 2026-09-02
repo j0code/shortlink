@@ -17,9 +17,9 @@ export default class API {
 		return post(this.baseUrl, "/api/v0/users", this.auth, { key })
 	}
 
-	createShortlink(url: string, claim: boolean, expiresAt: Temporal.Instant | null = null) {
+	createShortlink(url: string, claim: boolean, restricted: boolean, expiresAt: Temporal.Instant | null = null) {
 		const expires_at = expiresAt ? expiresAt.toString() : null
-		return post(this.baseUrl, "/api/v0/shortlinks", this.auth, { url, claim, expires_at }) as Promise<APIResponse<{ id: string }>>
+		return post(this.baseUrl, "/api/v0/shortlinks", this.auth, { url, claim, restricted, expires_at }) as Promise<APIResponse<{ id: string }>>
 	}
 
 	deleteShortlink(id: string) {

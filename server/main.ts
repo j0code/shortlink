@@ -24,13 +24,25 @@ app.use("/js", express.static(config.clientJsPath))
 
 app.get("/inspect/:id", (req, res) => {
 	const { id } = req.params
+	const user = cookieAuth(req.headers.cookie)
 	const info = getShortlinkInfo(id)
 	const visits = getVisits(id, 10)
-
 
 	if (!info) {
 		res.status(404).send("Shortlink not found")
 		return
+	}
+
+	if (info.restricted && (!user || user.id !== info.owner_id)) {
+		if (!user) {
+			res.status(401).send("Unauthenticated")
+			return
+		}
+
+		if (user.id !== info.owner_id) {
+			res.status(403).send("Unauthorized")
+			return
+		}
 	}
 
 	res.status(200).send(inspectPage(info, visits))

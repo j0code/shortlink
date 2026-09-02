@@ -15,6 +15,7 @@ export const shortlinkSchema = v.object({
 	id: v.string(),
 	url: v.string(),
 	owner_id: v.nullable(v.string()),
+	restricted: v.pipe(v.union([v.literal(1), v.literal(0)]), v.toBoolean()),
 	created_at: isoDate,
 	expires_at: v.nullable(isoDate),
 })
@@ -33,7 +34,7 @@ export const visitCountSchema = v.object({
 })
 
 export type User = v.InferInput<typeof userSchema>
-export type Shortlink = v.InferInput<typeof shortlinkSchema>
+export type Shortlink = v.InferOutput<typeof shortlinkSchema>
 export type Visit = v.InferInput<typeof visitSchema>
 export type VisitCount = v.InferInput<typeof visitCountSchema>
 

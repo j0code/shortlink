@@ -16,8 +16,9 @@ createForm.addEventListener("submit", async event => {
 	const url = formData.get("url") as string
 	const expires = formData.get("expires") as string
 	const claim = formData.get("claim") == "on"
+	const restricted = formData.get("restricted") == "on"
 	const expiresAt = expires === "never" ? null : Temporal.Now.zonedDateTimeISO().add(Temporal.Duration.from(expires)).toInstant()
-	const result = await api.createShortlink(url, claim, expiresAt)
+	const result = await api.createShortlink(url, claim, restricted, expiresAt)
 
 	if (!result.success) {
 		alert(`${result.error}\n${result.details}`)

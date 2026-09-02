@@ -27,7 +27,7 @@ export default class CreateShortlink extends APIResource {
 			return error("Failed to generate unique id", 500)
 		}
 
-		createShortlink(id, url, user_id, result.output.expires_at)
+		createShortlink(id, url, user_id, result.output.restricted, result.output.expires_at)
 
 		return success({ id })
 	}
@@ -40,6 +40,7 @@ const schema = v.object({
 		v.url("Invalid URL"),
 	),
 	claim: v.boolean(),
+	restricted: v.boolean(),
 	expires_at: v.nullable(v.pipe(
 		v.string(),
 		v.isoTimestamp(),

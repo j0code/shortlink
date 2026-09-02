@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS shortlinks (
 	id STRING PRIMARY KEY,
 	url STRING NOT NULL,
 	owner_id STRING,
+	restricted BOOLEAN NOT NULL,
 	created_at TIMESTAMP NOT NULL,
 	expires_at TIMESTAMP
 );

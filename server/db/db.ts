@@ -18,7 +18,7 @@ db.exec(initSql)
 const queries = {
 	insertUser: db.prepare("INSERT INTO users (id, key, created_at) VALUES (@id, @key, @created_at)"),
 	getUser: db.prepare("SELECT * FROM users WHERE id = @id"),
-	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url, owner_id, created_at, expires_at) VALUES (@id, @url, @owner_id, @created_at, @expires_at)"),
+	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url, owner_id, restricted, created_at, expires_at) VALUES (@id, @url, @owner_id, @restricted, @created_at, @expires_at)"),
 	getShortlink: db.prepare("SELECT * FROM shortlinks WHERE id = @id"),
 	getShortlinksFor: db.prepare("SELECT * FROM shortlinks WHERE owner_id = @owner_id"),
 	deleteShortlink: db.prepare("DELETE FROM shortlinks WHERE id = @id"),
@@ -36,9 +36,9 @@ export function getUser(id: string) {
 	return getAndParse(queries.getUser, { id }, userSchema, "user")
 }
 
-export function createShortlink(id: string, url: string, owner_id: string | null, expires_at: string | null) {
+export function createShortlink(id: string, url: string, owner_id: string | null, restricted: boolean, expires_at: string | null) {
 	expires_at = normalizeIsoDate(expires_at)
-	queries.insertShortlink.run({ id, url, owner_id, created_at: now(), expires_at })
+	queries.insertShortlink.run({ id, url, owner_id, restricted: restricted ? 1 : 0, created_at: now(), expires_at })
 }
 
 export function getShortlink(id: string): Shortlink | null {

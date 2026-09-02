@@ -28,6 +28,9 @@ export default function CreateShortlinkForm(loggedIn: boolean) {
 	<label>
 		Claim: <input type="checkbox" name="claim" ${loggedIn ? 'checked' : 'disabled title="You must be logged in to claim a shortlink"'} >
 	</label>
+	<label>
+		Restrict Visibility: <input type="checkbox" name="restricted" ${loggedIn ? '' : 'disabled title="You must be logged in to restrict visibility"'} >
+	</label>
 	<button>Create link!</button>
 	<label>
 		Shortlink: ${CopyableOutputLink("", "shortlink", "url")}

@@ -3,7 +3,7 @@ export type Method = "GET" | "POST" | "DELETE"
 export type Params = Record<string, string>
 
 export type SuccessStatus = 200
-export type ErrorStatus   = 400 | 404 | 500
+export type ErrorStatus   = 400 | 401 | 403 |404 | 500
 
 export type APIResponse<T = unknown> = {
 	success: true,
