@@ -68,7 +68,7 @@ form {
 label, p {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 0.5em;
 }
 
 input {
@@ -119,7 +119,7 @@ button {
 	cursor: pointer;
 	margin-bottom: 2px;
 
-	&:active {
+	&:not(.action-button):active {
 		box-shadow: none;
 		transform: translate(2px, 2px);
 	}
@@ -139,12 +139,15 @@ output {
 .copyable {
 	border: none;
 	border-radius: 10px;
-	padding-inline: 10px;
-	padding-block: 5px;
 	cursor: pointer;
 	
 	&:hover, &:focus-visible {
 		outline-style: dashed;
+		outline-offset: 5px;
+
+		&:empty {
+			outline-style: none;
+		}
 	}
 }
 
@@ -167,4 +170,43 @@ footer {
 #logout-button {
 	--button-background: var(--logout-button-background);
 	--button-shadow: var(--logout-button-shadow);
+}
+
+.action-buttons {
+	display: flex;
+	justify-content: end;
+}
+
+.action-button {
+	height: fit-content;
+	width: fit-content;
+	padding: 0px;
+	margin: 0px;
+	background: none;
+	box-shadow: none;
+	width: 1.25em;
+	height: 1.25em;
+	outline-offset: 3px;
+
+	> svg {
+		width: 1.25em;
+		height: 1.25em;
+	}
+}
+
+a.action-button {
+	color: var(--text-color);
+	border-radius: 100%;
+
+	&:visited {
+		color: var(--text-color);
+	}
+}
+
+output:empty ~ span > a {
+	display: none;
+}
+
+.delete-shortlink {
+	color: var(--red-button-color);
 }

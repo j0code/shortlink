@@ -1,4 +1,5 @@
 import type { ShortlinkInfo, Visit } from "../server/db/schemas.ts"
+import { CopyableLink } from "./CopyableLink.ts"
 
 export function generateShortlinkInfo(baseUrl: string, shortlink: ShortlinkInfo, visits: Visit[]) {
 	const createdAt = new Date(shortlink.created_at).toISOString()
@@ -9,8 +10,8 @@ export function generateShortlinkInfo(baseUrl: string, shortlink: ShortlinkInfo,
 	return `
 <div class="shortlink-info">
 	<p>Shortlink ID: <code class="copyable">${shortlink.id}</code></p>
-	<p>Shortlink URL: <a href="${shortlinkUrl}" target="_blank" class="copyable">${shortlinkUrl}</a></p>
-	<p>Target URL: <a href="${shortlink.url}" target="_blank" class="copyable">${shortlink.url}</a></p>
+	<p>Shortlink URL: ${CopyableLink(shortlinkUrl)}</p>
+	<p>Target URL: ${CopyableLink(shortlink.url)}</p>
 	<p>Created at: <time datetime="${createdAt}"></time></p>
 	<p>Expires at: <span>${expiresText}</span></p>
 	<p>Visit count: <code>${shortlink.visitCount}</code></p>
@@ -52,4 +53,4 @@ function generateVisitsTable(visits: Visit[]) {
 	</tbody>
 </table>
 	`.trim()
-}	
+}

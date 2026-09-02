@@ -1,3 +1,5 @@
+import { CopyableOutputLink } from "./CopyableLink.ts"
+
 const CreateShortlinkForm = `
 <form id="create-shortlink" autocomplete="off">
 	<h3>Create new shortlink</h3>
@@ -24,7 +26,7 @@ const CreateShortlinkForm = `
 	</label>
 	<button>Create link!</button>
 	<label>
-		Shortlink: <output name="shortlink" for="url" aria-live="polite" class="copyable"></output>
+		Shortlink: ${CopyableOutputLink("", "shortlink", "url")}
 	</label>
 	<label>
 		Shortlink ID: <output name="shortlinkId" for="url" aria-live="polite" class="copyable"></output>

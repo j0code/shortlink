@@ -1,4 +1,5 @@
 import type { ShortlinkInfo } from "../server/db/schemas.ts"
+import ActionButton from "./ActionButton.ts"
 
 export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 	if (shortlinks.length === 0) {
@@ -8,17 +9,21 @@ export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 	const rows = shortlinks.map((shortlink) => {
 		const targetUrl = new URL(shortlink.url)
 		const shortTargetUrl = targetUrl.href.substring(targetUrl.protocol.length + 2)
+		const buttons: string[] = []
+
+		if (!isExpired(shortlink)) {
+			buttons.push(ActionButton("search-code", "inspect-shortlink", { id: shortlink.id }))
+		}
+		buttons.push(ActionButton("trash-2", "delete-shortlink", { id: shortlink.id }))
 		
 		return `
 <tr>
 	<td>${shortlink.id}</td>
 	<td>${shortTargetUrl}</td>
-	<td>${shortlink.visitCount}</td>
-	<td><time datetime="${shortlink.created_at}"></time></td>
 	<td><time datetime="${shortlink.expires_at ?? ""}" data-relative></time></td>
+	<td>${shortlink.visitCount}</td>
 	<td>
-		<a href="/inspect/${shortlink.id}" target="_blank">Inspect</a>
-		<button class="delete-shortlink" data-id="${shortlink.id}">Delete</button>
+		<span class="action-buttons">${buttons.join("\n")}</span>
 	</td>
 </tr>
 		`.trim()
@@ -30,9 +35,8 @@ export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 		<tr>
 			<th>ID</th>
 			<th>Target URL</th>
-			<th>Visit Count</th>
-			<th>Created At</th>
 			<th>Expires</th>
+			<th>Visit Count</th>
 			<th>Actions</th>
 		</tr>
 	</thead>
@@ -41,4 +45,15 @@ export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 	</tbody>
 </table>
 	`.trim()
-}	
+}
+
+function isExpired(shortlink: ShortlinkInfo): boolean {
+	if (!shortlink.expires_at) {
+		return false
+	}
+
+	const now = Temporal.Now.zonedDateTimeISO("UTC")
+	const expireTime = Temporal.ZonedDateTime.from(`${shortlink.expires_at}[UTC]`)
+	const diff = now.until(expireTime, { largestUnit: 'year', smallestUnit: 'second' })
+	return diff.sign === -1
+}

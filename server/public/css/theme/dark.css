@@ -11,5 +11,6 @@
 		--radio-check-background: #d0d0d0;
 		--logout-button-background: oklch(0.4891 0.1669 17.51);
 		--logout-button-shadow: oklch(0.2768 0.1669 17.51);
+		--red-button-color: oklch(0.5128 0.1853 29.23);
 	}
 }

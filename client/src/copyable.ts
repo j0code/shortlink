@@ -5,7 +5,7 @@ export function installCopyEventListeners() {
 		if (copyable.tagName != "A") copyable.addEventListener("click", copyValue(copyable))
 		copyable.addEventListener("keydown", copyValueOnKey(copyable))
 
-		copyable.tabIndex = 0
+		if (copyable.tagName != "OUTPUT") copyable.tabIndex = 0
 		copyable.title = "Press space to copy."
 	})
 }
