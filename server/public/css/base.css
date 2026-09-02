@@ -76,7 +76,7 @@ input {
 	border: none;
 }
 
-input:not([type="radio"]) {
+input:not([type="radio"]):not([type="checkbox"]) {
 	color: var(--input-text-color);
 	border-radius: 10px;
 	width: 200px;

@@ -1,6 +1,7 @@
 import { CopyableOutputLink } from "./CopyableLink.ts"
 
-const CreateShortlinkForm = `
+export default function CreateShortlinkForm(loggedIn: boolean) {
+	return `
 <form id="create-shortlink" autocomplete="off">
 	<h3>Create new shortlink</h3>
 	<label>
@@ -24,6 +25,9 @@ const CreateShortlinkForm = `
 			<input type="radio" name="expires" value="P3Y"> 3 Years
 		</label>
 	</label>
+	<label>
+		Claim: <input type="checkbox" name="claim" ${loggedIn ? 'checked' : 'disabled title="You must be logged in to claim a shortlink"'} >
+	</label>
 	<button>Create link!</button>
 	<label>
 		Shortlink: ${CopyableOutputLink("", "shortlink", "url")}
@@ -33,5 +37,4 @@ const CreateShortlinkForm = `
 	</label>
 </form>
 `.trim()
-
-export default CreateShortlinkForm
+}

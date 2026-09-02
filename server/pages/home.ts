@@ -1,7 +1,7 @@
 import config from "../config/config.ts"
 import { CreateShortlinkForm, InspectShortlinkForm, LoginForm, UserInfo, generateHead, generateFooter } from "@j0code/shortlink-components"
 import info from "../package_info.ts"
-import { User } from "../db/schemas.ts"
+import type { User } from "../db/schemas.ts"
 
 const footer = generateFooter(info)
 const branding = config.branding
@@ -18,7 +18,7 @@ ${generateHead("home")}
 		<h1>${branding.name}</h1>
 		<main>
 			<div class="divider"></div>
-			${CreateShortlinkForm}
+			${CreateShortlinkForm(!!user)}
 			<div class="divider"></div>
 			${InspectShortlinkForm}
 			<div class="divider"></div>
