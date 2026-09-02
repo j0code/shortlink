@@ -16,7 +16,7 @@ function randomId(length: number = 12): string {
 	const byteLength = Math.ceil(bits / 8)
 	const buffer = new Uint8Array(byteLength)
 	crypto.getRandomValues(buffer)
-	return buffer.toBase64().substring(0, length)
+	return buffer.toBase64({ alphabet: "base64url" }).substring(0, length)
 }
 
 export function isIllegalId(id: string): boolean {
