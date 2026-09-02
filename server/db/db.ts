@@ -21,9 +21,11 @@ const queries = {
 	insertShortlink: db.prepare("INSERT INTO shortlinks (id, url, owner_id, created_at, expires_at) VALUES (@id, @url, @owner_id, @created_at, @expires_at)"),
 	getShortlink: db.prepare("SELECT * FROM shortlinks WHERE id = @id"),
 	getShortlinksFor: db.prepare("SELECT * FROM shortlinks WHERE owner_id = @owner_id"),
+	deleteShortlink: db.prepare("DELETE FROM shortlinks WHERE id = @id"),
 	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine, visited_at) VALUES (@shortlink_id, @browser, @os, @cpu, @engine, @visited_at)"),
 	getVisits: db.prepare("SELECT * FROM visits WHERE shortlink_id = @shortlink_id ORDER BY visited_at DESC LIMIT @limit"),
 	countVisits: db.prepare("SELECT COUNT(*) as count FROM visits WHERE shortlink_id = @shortlink_id"),
+	deleteVisitsFor: db.prepare("DELETE FROM visits WHERE shortlink_id = @shortlink_id"),
 }
 
 export function createUser(id: string, key: string) {
@@ -64,6 +66,11 @@ export function getShortlinkInfo(id: string): ShortlinkInfo | null {
 	}
 
 	return { ...shortlink, visitCount }
+}
+
+export function deleteShortlink(id: string) {
+	queries.deleteVisitsFor.run({ shortlink_id: id })
+	queries.deleteShortlink.run({ id })
 }
 
 export function getShortlinksFor(owner_id: string): Shortlink[] {

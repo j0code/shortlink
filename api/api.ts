@@ -22,6 +22,10 @@ export default class API {
 		return post(this.baseUrl, "/api/v0/shortlinks", this.auth, { url, claim, expires_at }) as Promise<APIResponse<{ id: string }>>
 	}
 
+	deleteShortlink(id: string) {
+		return del(this.baseUrl, `/api/v0/shortlinks/${id}`, this.auth) as Promise<APIResponse<{ id: string }>> // TODO
+	}
+
 }
 
 
@@ -35,6 +39,20 @@ function get(baseUrl: string, route: string, auth: string | null) {
 
 	return fetch(url, {
 		method: "GET",
+		headers
+	}).then(res => res.json())
+}
+
+function del(baseUrl: string, route: string, auth: string | null) {
+	const url = new URL(route, baseUrl)
+	const headers: HeadersInit = {}
+
+	if (auth) {
+		headers["Authorization"] = auth
+	}
+
+	return fetch(url, {
+		method: "DELETE",
 		headers
 	}).then(res => res.json())
 }

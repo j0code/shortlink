@@ -10,8 +10,7 @@ export default class GetShortlink extends APIResource {
 	}
 
 	override get(_body: unknown, params: Params) {
-		const id = typeof params.id === "string" ? params.id : params.id[0]
-		const visits = getVisits(id, 10)
+		const visits = getVisits(params.id, 10)
 
 		return success(visits)
 	}

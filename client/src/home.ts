@@ -1,5 +1,5 @@
 import API, { getKey } from "@j0code/shortlink-api"
-import { installEventListeners } from "./copyable.ts"
+import { installCopyEventListeners } from "./copyable.ts"
 
 const createForm  = document.querySelector("#create-shortlink")  as HTMLFormElement
 const inspectForm = document.querySelector("#inspect-shortlink") as HTMLFormElement

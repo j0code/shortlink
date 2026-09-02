@@ -1,6 +1,6 @@
-export type Method = "GET" | "POST"
+export type Method = "GET" | "POST" | "DELETE"
 
-export type Params = Record<string, string | string[]>
+export type Params = Record<string, string>
 
 export type SuccessStatus = 200
 export type ErrorStatus   = 400 | 404 | 500

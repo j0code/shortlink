@@ -18,6 +18,7 @@ export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 	<td><time datetime="${shortlink.expires_at ?? ""}" data-relative></time></td>
 	<td>
 		<a href="/inspect/${shortlink.id}" target="_blank">Inspect</a>
+		<button class="delete-shortlink" data-id="${shortlink.id}">Delete</button>
 	</td>
 </tr>
 		`.trim()

@@ -5,7 +5,7 @@ import info from "../package_info.ts"
 const footer = generateFooter(info)
 
 export default function userShortlinksPage(shortlinks: ShortlinkInfo[]) {
-	const head = generateHead("inspect")
+	const head = generateHead("shortlinks")
 	console.log("shortlinks", shortlinks)
 
 	return `

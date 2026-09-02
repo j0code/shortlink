@@ -19,4 +19,8 @@ export default abstract class APIResource {
 		throw new Error(`POST not implemented on ${this.route}`)
 	}
 
+	delete(body: unknown, params: Params, user: User | null): APIResponse {
+		throw new Error(`DELETE not implemented on ${this.route}`)
+	}
+
 }

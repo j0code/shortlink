@@ -1,4 +1,4 @@
-export function installEventListeners() {
+export function installCopyEventListeners() {
 	const copyables = document.querySelectorAll(".copyable") as NodeListOf<HTMLElement>
 
 	copyables.forEach(copyable => {

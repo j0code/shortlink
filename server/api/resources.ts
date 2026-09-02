@@ -1,6 +1,6 @@
 import type { Application, Request, Response } from "express"
 import type APIResource from "./APIResource.ts"
-import type { APIResponse, Method } from "./types.ts"
+import type { APIResponse, Method, Params } from "./types.ts"
 import users from "./resources/users.ts"
 import shortlinks from "./resources/shortlinks.ts"
 import shortlink from "./resources/shortlink.ts"
@@ -24,7 +24,7 @@ export function registerResources(app: Application) {
 				console.log("user:", user)
 
 				try {
-					const result = await resource[lowerMethod](req.body, req.params, user)
+					const result = await resource[lowerMethod](req.body, req.params as Params, user)
 					headers(req, res, resource)
 					res.status(result.status).send(result)
 				} catch (err) {

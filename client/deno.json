@@ -5,7 +5,7 @@
 		"./copyable": "./src/copyable.ts"
 	},
 	"tasks": {
-		"build": "deno bundle --outdir build --code-splitting src/home.ts src/inspect.ts --sourcemap linked",
-		"dev": "deno bundle --outdir build --code-splitting src/home.ts src/inspect.ts --sourcemap linked --watch"
+		"build": "deno bundle --outdir build --code-splitting src/home.ts src/inspect.ts src/shortlinks.ts --sourcemap linked",
+		"dev": "deno bundle --outdir build --code-splitting src/home.ts src/inspect.ts src/shortlinks.ts --sourcemap linked --watch"
 	}
 }
