@@ -1,0 +1,8 @@
+@media (orientation: portrait), (max-width: 1000px) {
+	#card, #card.wide {
+		width: 100vw;
+		max-width: initial;
+		height: 100vh;
+		border-radius: 0px;
+	}
+}

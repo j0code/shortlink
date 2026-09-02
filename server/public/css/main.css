@@ -1,5 +1,6 @@
-@layer reset, base, theme;
+@layer reset, base, mobile, theme;
 @import "reset.css" layer(reset);
 @import "base.css" layer(base);
+@import "mobile.css" layer(mobile);
 @import "theme/dark.css" layer(theme);
 @import "theme/light.css" layer(theme);
