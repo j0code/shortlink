@@ -9,7 +9,8 @@
 		"./client",
 		"./browser-ext",
 		"./components",
-		"./api"
+		"./api",
+		"./api-types"
 	],
 	"fmt": {
 		"semiColons": false

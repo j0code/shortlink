@@ -1,5 +1,5 @@
 import type { User } from "../db/schemas.ts"
-import type { APIResponse, Method, Params } from "./types.ts"
+import type { APIResponse, Method, Params } from "@j0code/shortlink-api-types"
 
 export default abstract class APIResource {
 
@@ -7,7 +7,7 @@ export default abstract class APIResource {
 	readonly supportedMethods: Set<Method>
 
 	constructor(route: string, supportedMethods: Method[]) {
-		this.route = route
+		this.route = new URL(route, "http://shortlink/api/v0").pathname
 		this.supportedMethods = new Set(supportedMethods)
 	}
 

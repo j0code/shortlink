@@ -1,9 +1,5 @@
-export type Method = "GET" | "POST" | "DELETE"
-
-export type Params = Record<string, string>
-
-export type SuccessStatus = 200
-export type ErrorStatus   = 400 | 401 | 403 |404 | 500
+import type { ErrorStatus, SuccessStatus } from "./base.ts"
+import * as v from "@valibot/valibot"
 
 export type APIResponse<T = unknown> = {
 	success: true,

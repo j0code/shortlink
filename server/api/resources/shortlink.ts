@@ -1,13 +1,14 @@
 import APIResource from "../APIResource.ts"
 import { deleteShortlink, getShortlinkInfo } from "../../db/db.ts"
-import { error, success } from "../types.ts"
-import type { Params } from "../types.ts"
+import { error, success } from "@j0code/shortlink-api-types"
+import type { Params } from "@j0code/shortlink-api-types"
+import { SHORTLINK } from "@j0code/shortlink-api-types/routes"
 import type { User } from "../../db/schemas.ts"
 
 export default class GetShortlink extends APIResource {
 
 	constructor() {
-		super("/api/v0/shortlinks/:id", ["GET", "DELETE"])
+		super(SHORTLINK, ["GET", "DELETE"])
 	}
 
 	override get(_body: unknown, params: Params, user: User | null) {

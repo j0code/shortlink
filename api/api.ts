@@ -14,7 +14,7 @@ export default class API {
 
 	async createUser(password: string) {
 		const key = await getKey(password)
-		return post(this.baseUrl, "/api/v0/users", this.auth, { key })
+		return post(this.baseUrl, "/api/v0/users", null, { key })
 	}
 
 	createShortlink(url: string, claim: boolean, restricted: boolean, expiresAt: Temporal.Instant | null = null) {

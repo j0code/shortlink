@@ -1,14 +1,15 @@
 import APIResource from "../APIResource.ts"
 import * as v from "@valibot/valibot"
 import { createShortlink, getShortlink } from "../../db/db.ts"
-import { error, success } from "../types.ts"
+import { error, success } from "@j0code/shortlink-api-types"
 import { generateId } from "../../ids.ts"
 import type { User } from "../../db/schemas.ts"
+import { SHORTLINKS } from "@j0code/shortlink-api-types/routes"
 
 export default class CreateShortlink extends APIResource {
 
 	constructor() {
-		super("/api/v0/shortlinks", ["POST"])
+		super(SHORTLINKS, ["POST"])
 	}
 
 	override post(body: unknown, _params: unknown, user: User | null) {

@@ -34,6 +34,7 @@
     "jsr:@std/path@^1.1.6": "1.1.6",
     "jsr:@std/streams@^1.1.2": "1.1.2",
     "jsr:@valibot/valibot@^1.4.2": "1.4.2",
+    "jsr:@valibot/valibot@^1.5.0": "1.5.0",
     "npm:@types/better-sqlite3@^9.6.0": "9.6.0",
     "npm:@types/chrome@0.0.268": "0.0.268",
     "npm:@types/express@^5.0.6": "5.0.6",
@@ -163,6 +164,9 @@
     },
     "@valibot/valibot@1.4.2": {
       "integrity": "14f7fbb7474a8ade216224062d1e8b23cd17ecbb5176fc23595e846778c4725d"
+    },
+    "@valibot/valibot@1.5.0": {
+      "integrity": "126dc8e2235f19a6c23f3c14a7cec7b1f0d1876babee2c77a3436d42c5429af3"
     }
   },
   "npm": {
@@ -801,6 +805,11 @@
   },
   "workspace": {
     "members": {
+      "api-types": {
+        "dependencies": [
+          "jsr:@valibot/valibot@^1.5.0"
+        ]
+      },
       "browser-ext": {
         "dependencies": [
           "jsr:@bpev/bext@1.4.2"
