@@ -35,11 +35,16 @@ const apiResponseSchema = v.variant("success", [
 ])
 
 type ObjectSchema<
-TEntries extends v.ObjectEntries = v.ObjectEntries,
-TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined = v.ErrorMessage<v.ObjectIssue> | undefined
+	TEntries extends v.ObjectEntries = v.ObjectEntries,
+	TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined = v.ErrorMessage<v.ObjectIssue> | undefined
 > = v.ObjectSchema<TEntries, TMessage>
 
-type ParseResult<TSchema extends ObjectSchema> = {
+type ArraySchema<
+	TItem extends ObjectSchema = ObjectSchema,
+	TMessage extends v.ErrorMessage<v.ArrayIssue> | undefined = v.ErrorMessage<v.ArrayIssue> | undefined
+> = v.ArraySchema<TItem, TMessage>
+
+type ParseResult<TSchema extends ObjectSchema | ArraySchema> = {
 	success: true,
 	output: APIResponse<v.InferOutput<TSchema>>
 } | {
@@ -48,9 +53,9 @@ type ParseResult<TSchema extends ObjectSchema> = {
 }
 
 export function parseAPIResponse<
-TEntries extends v.ObjectEntries,
-TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined
->(dataSchema: ObjectSchema<TEntries, TMessage>, res: unknown): ParseResult<typeof dataSchema> {
+	TEntries extends v.ObjectEntries,
+	TDataSchema extends ObjectSchema<TEntries> | ArraySchema<ObjectSchema<TEntries>>
+>(dataSchema: TDataSchema, res: unknown): ParseResult<TDataSchema> {
 	const result = v.safeParse(apiResponseSchema, res)
 
 	if (!result.success) {
