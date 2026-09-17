@@ -1,4 +1,3 @@
-import * as v from "@valibot/valibot"
 import { shortlinkInfoSchema } from "@j0code/shortlink-api-types"
 import { emptySchema } from "../base.ts"
 

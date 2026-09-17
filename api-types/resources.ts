@@ -1,5 +1,5 @@
 import * as routes from "./routes.ts"
-import type { Method } from "./base.ts"
+import type { emptySchema, Method } from "./base.ts"
 import type { ArraySchema, IntersectSchema, ObjectSchema } from "./helpers.ts"
 import type * as v from "@valibot/valibot"
 import { usersPostRequestSchema, usersPostResponseSchema } from "./resources/users.ts"
@@ -42,7 +42,7 @@ export const resources = {
 } as const satisfies Record<routes.Route, Partial<Record<Method, ResourceSchemas>>>
 
 type ResourceSchemas = {
-	request: ObjectSchema | v.NeverSchema<undefined>
+	request: ObjectSchema | typeof emptySchema
 	response: ObjectSchema | IntersectSchema | ArraySchema
 }
 
