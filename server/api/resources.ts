@@ -17,9 +17,10 @@ const resources = [
 
 export function registerResources(app: Application) {
 	resources.forEach(resource => {
+		const fullRoute = `/api/v0${resource.route}`
+		
 		resource.supportedMethods.forEach(method => {
 			const lowerMethod = method.toLowerCase() as Lowercase<Method>
-			const fullRoute = `/api/v0${resource.route}`
 
 			app[lowerMethod](fullRoute, async (req, res) => {
 				const user = apiAuth(req.headers.authorization, req.headers.cookie)
@@ -36,7 +37,7 @@ export function registerResources(app: Application) {
 			})
 		})
 
-		app.options(resource.route, (req, res) => {
+		app.options(fullRoute, (req, res) => {
 			headers(req, res, resource)
 			res.status(200).end()
 		})

@@ -38,7 +38,7 @@ app.get("/inspect/:id", (req, res) => {
 		authError(auth, res)
 		return
 	}
-	
+
 	const visits = getVisits(id, 10)
 
 	res.status(200).send(inspectPage(info, visits))

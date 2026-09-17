@@ -1,6 +1,6 @@
 import APIResource from "../APIResource.ts"
 import * as v from "@valibot/valibot"
-import { error, success } from "@j0code/shortlink-api-types"
+import { error, success, usersPostRequestSchema } from "@j0code/shortlink-api-types"
 import { generateId } from "../../ids.ts"
 import { createUser, getUser } from "../../db/db.ts"
 import { USERS } from "@j0code/shortlink-api-types/routes"
@@ -12,7 +12,7 @@ export default class UsersResource extends APIResource<typeof USERS> {
 	}
 
 	override post(body: unknown) {
-		const result = v.safeParse(schema, body)
+		const result = v.safeParse(usersPostRequestSchema, body)
 
 		if (!result.success) {
 			const summary = v.summarize(result.issues)
@@ -32,11 +32,3 @@ export default class UsersResource extends APIResource<typeof USERS> {
 	}
 
 }
-
-const schema = v.object({
-	key: v.pipe(
-		v.string(),
-		v.length(64),
-		v.hexadecimal()
-	)
-})

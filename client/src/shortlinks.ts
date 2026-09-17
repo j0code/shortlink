@@ -40,5 +40,5 @@ function inspectShortlink(button: HTMLButtonElement) {
 		return
 	}
 	
-	window.open(`/inspect/${id}`, "_blank", "noopener=true")
+	open(`/inspect/${id}`, "_blank", "noopener=true")
 }

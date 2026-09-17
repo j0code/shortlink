@@ -90,4 +90,5 @@ function setCookies(id: string, key: string) {
 installCopyEventListeners()
 console.log("cookies", document.cookie)
 
+// @ts-ignore: debugging
 globalThis.api = api

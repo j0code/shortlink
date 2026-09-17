@@ -1,5 +1,5 @@
 import * as routes from "@j0code/shortlink-api-types/routes"
-import type { Params, GETRoute, POSTRoute, DELETERoute, APIResponseDataSchema, ResponseSchema } from "@j0code/shortlink-api-types"
+import type { Params, GETRoute, POSTRoute, DELETERoute, APIResponseDataSchema, ResponseSchema, Request } from "@j0code/shortlink-api-types"
 import { parseAPIResponse, resources } from "@j0code/shortlink-api-types"
 import { ValiError } from "@valibot/valibot"
 
@@ -41,7 +41,7 @@ export default class API {
 		return del(this.baseUrl, routes.substitute(route, params), this.auth, schema)
 	}
 
-	$post<TRoute extends POSTRoute>(route: TRoute, params: Params, payload: unknown) {
+	$post<TRoute extends POSTRoute>(route: TRoute, params: Params, payload: Request<TRoute, "POST">) {
 		const schema = resources[route]["POST"].response as ResponseSchema<TRoute, "POST">
 		return post(this.baseUrl, routes.substitute(route, params), this.auth, payload, schema)
 	}

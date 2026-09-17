@@ -40,7 +40,8 @@ type ParseResult<TSchema extends APIResponseDataSchema> = {
 	output: APIResponse<v.InferOutput<TSchema>>
 } | {
 	success: false,
-	issues: [v.InferIssue<TSchema>, ...v.InferIssue<TSchema>[]]
+	scope: "envelope" | "data"
+	issues: [v.BaseIssue<unknown>, ...v.BaseIssue<unknown>[]]
 }
 
 export function parseAPIResponse<
@@ -49,11 +50,11 @@ export function parseAPIResponse<
 	const result = v.safeParse(apiResponseSchema, res)
 
 	if (!result.success) {
-		return { success: false, issues: result.issues }
+		return { success: false, issues: result.issues, scope: "envelope" }
 	}
 
 	const output = result.output
-	
+
 	if (!output.success) {
 		return { success: true, output }
 	}
@@ -61,7 +62,7 @@ export function parseAPIResponse<
 	const { success, output: dataOutput, issues } = v.safeParse(dataSchema, output.result)
 
 	if (!success) {
-		return { success: false, issues}
+		return { success: false, issues, scope: "data" }
 	}
 
 	return { success: true, output: {...output, result: dataOutput} }

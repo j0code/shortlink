@@ -15,7 +15,7 @@ export const resources = {
 		}
 	},
 	[routes.USER]: {
-		
+
 	},
 	[routes.SHORTLINKS]: {
 		"POST": {

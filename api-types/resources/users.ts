@@ -4,6 +4,7 @@ export const usersPostRequestSchema = v.object({
 	key: v.pipe(
 		v.string(),
 		v.length(64, "Key must be a sha-256 hash"),
+		v.hexadecimal("Key must be a sha-256 hash"),
 	)
 })
 
