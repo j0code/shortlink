@@ -45,14 +45,15 @@ export function registerResources(app: Application) {
 }
 
 function headers(req: Request, res: Response, resource: APIResource<Route>) {
-	cors(req, res)
-	res.appendHeader("Allow", resource.supportedMethods.values().toArray().join(", "))
+	const methods = resource.supportedMethods.values().toArray().join(", ")
+	cors(req, res, methods)
+	res.appendHeader("Allow", methods)
 }
 
-function cors(req: Request, res: Response) {
+function cors(req: Request, res: Response, methods: string) {
 	const origin = req.headers.origin
-	if (origin) res.appendHeader("Access-Control-Allow-Origin", origin)
-	else res.appendHeader("Access-Control-Allow-Origin", "*")
+	res.appendHeader("Access-Control-Allow-Origin", origin ? origin : "*")
 	res.appendHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+	res.appendHeader("Access-Control-Allow-Methods", methods)
 	return
 }
