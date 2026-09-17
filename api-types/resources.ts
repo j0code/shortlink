@@ -59,3 +59,14 @@ export type Response<TRoute extends routes.Route, TMethod extends Method> =
 		? v.InferOutput<(typeof resources)[TRoute][TMethod]["response"]>
 		: never
 	: never
+
+type Filter<TMethod extends Method, TRoute extends routes.Route = routes.Route> =
+	TRoute extends unknown
+	? (typeof resources)[TRoute] extends { [K in TMethod]: ResourceSchemas }
+		? TRoute
+		: never
+	: never
+
+export type GETRoute = Filter<"GET">
+export type POSTRoute = Filter<"POST">
+export type DELETERoute = Filter<"DELETE">

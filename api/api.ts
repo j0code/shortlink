@@ -1,10 +1,15 @@
+import * as routes from "@j0code/shortlink-api-types/routes"
+import type { Params, GETRoute, POSTRoute, DELETERoute } from "@j0code/shortlink-api-types"
+import { resources } from "@j0code/shortlink-api-types"
+import * as v from "@valibot/valibot"
+
 export default class API {
 
 	readonly baseUrl: string
 	private auth: string | null
 
 	constructor(baseUrl: string) {
-		this.baseUrl = baseUrl,
+		this.baseUrl = new URL("/api/v0", baseUrl).href,
 		this.auth = null
 	}
 
@@ -14,52 +19,63 @@ export default class API {
 
 	async createUser(password: string) {
 		const key = await getKey(password)
-		return post(this.baseUrl, "/api/v0/users", null, { key })
+		return this.$post(routes.USERS, {}, { key })
 	}
 
 	createShortlink(url: string, claim: boolean, restricted: boolean, expiresAt: Temporal.Instant | null = null) {
 		const expires_at = expiresAt ? expiresAt.toString() : null
-		return post(this.baseUrl, "/api/v0/shortlinks", this.auth, { url, claim, restricted, expires_at }) as Promise<APIResponse<{ id: string }>>
+		return this.$post(routes.SHORTLINKS, {}, { url, claim, restricted, expires_at })
 	}
 
 	deleteShortlink(id: string) {
-		return del(this.baseUrl, `/api/v0/shortlinks/${id}`, this.auth) as Promise<APIResponse<{ id: string }>> // TODO
+		return this.$delete(routes.SHORTLINK, { id })
+	}
+
+	$get(route: GETRoute, params: Params) {
+		const schema = resources[route]["GET"].response
+		return get(this.baseUrl, routes.substitute(route, params), this.auth, schema)
+	}
+
+	$delete(route: DELETERoute, params: Params) {
+		const schema = resources[route]["DELETE"].response
+		return del(this.baseUrl, routes.substitute(route, params), this.auth, schema)
+	}
+
+	$post(route: POSTRoute, params: Params, payload: unknown) {
+		const schema = resources[route]["POST"].response
+		return post(this.baseUrl, routes.substitute(route, params), this.auth, payload, schema)
 	}
 
 }
 
-
-function get(baseUrl: string, route: string, auth: string | null) {
-	const url = new URL(route, baseUrl)
+function get<TSchema extends v.GenericSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
 	const headers: HeadersInit = {}
 
 	if (auth) {
 		headers["Authorization"] = auth
 	}
 
-	return fetch(url, {
+	return call(baseUrl, route, {
 		method: "GET",
 		headers
-	}).then(res => res.json())
+	}, schema)
 }
 
-function del(baseUrl: string, route: string, auth: string | null) {
-	const url = new URL(route, baseUrl)
+function del<TSchema extends v.GenericSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
 	const headers: HeadersInit = {}
 
 	if (auth) {
 		headers["Authorization"] = auth
 	}
 
-	return fetch(url, {
+	return call(baseUrl, route, {
 		method: "DELETE",
 		headers
-	}).then(res => res.json())
+	}, schema)
 }
 
-function post(baseUrl: string, route: string, auth: string | null, payload: unknown) {
+function post<TSchema extends v.GenericSchema>(baseUrl: string, route: string, auth: string | null, payload: unknown, schema: TSchema) {
 	console.log("payload", payload)
-	const url = new URL(route, baseUrl)
 	const headers: HeadersInit = {
 		"Content-Type": "application/json"
 	}
@@ -69,11 +85,11 @@ function post(baseUrl: string, route: string, auth: string | null, payload: unkn
 		headers["Authorization"] = auth
 	}
 
-	return fetch(url, {
+	return call(baseUrl, route, {
 		method: "POST",
 		body: JSON.stringify(payload),
 		headers
-	}).then(res => res.json())
+	}, schema)
 }
 
 export async function getKey(password: string) {
@@ -82,13 +98,11 @@ export async function getKey(password: string) {
 	return new Uint8Array(digest).toHex()
 }
 
-export type APIResponse<T = unknown> = {
-	success: true,
-	status: number
-	result: T
-} | {
-	success: false,
-	status: number,
-	error: string,
-	details?: unknown
+async function call<TSchema extends v.GenericSchema>(baseUrl: string, route: string, init: RequestInit, schema: TSchema): Promise<v.InferOutput<typeof schema>> {
+	const url = `${baseUrl}${route}`
+
+	const res = await fetch(url, init)
+	const body = await res.json()
+
+	return v.parse(schema, body)
 }

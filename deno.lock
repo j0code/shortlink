@@ -33,7 +33,6 @@
     "jsr:@std/path@^1.1.5": "1.1.6",
     "jsr:@std/path@^1.1.6": "1.1.6",
     "jsr:@std/streams@^1.1.2": "1.1.2",
-    "jsr:@valibot/valibot@^1.4.2": "1.5.0",
     "jsr:@valibot/valibot@^1.5.0": "1.5.0",
     "npm:@types/better-sqlite3@^9.6.0": "9.6.0",
     "npm:@types/chrome@0.0.268": "0.0.268",
@@ -805,6 +804,11 @@
   },
   "workspace": {
     "members": {
+      "api": {
+        "dependencies": [
+          "jsr:@valibot/valibot@^1.5.0"
+        ]
+      },
       "api-types": {
         "dependencies": [
           "jsr:@valibot/valibot@^1.5.0"
@@ -822,7 +826,7 @@
           "jsr:@std/assert@1",
           "jsr:@std/encoding@^1.0.11",
           "jsr:@std/http@^1.1.3",
-          "jsr:@valibot/valibot@^1.4.2",
+          "jsr:@valibot/valibot@^1.5.0",
           "npm:@types/better-sqlite3@^9.6.0",
           "npm:@types/express@^5.0.6",
           "npm:better-sqlite3@^13.0.3",
