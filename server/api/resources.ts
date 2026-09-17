@@ -19,7 +19,7 @@ export function registerResources(app: Application) {
 	resources.forEach(resource => {
 		resource.supportedMethods.forEach(method => {
 			const lowerMethod = method.toLowerCase() as Lowercase<Method>
-			const fullRoute = new URL(resource.route, "http://shortlink/api/v0").pathname
+			const fullRoute = `/api/v0${resource.route}`
 
 			app[lowerMethod](fullRoute, async (req, res) => {
 				const user = apiAuth(req.headers.authorization, req.headers.cookie)

@@ -4,5 +4,5 @@ export const SHORTLINKS = "/shortlinks"
 export const SHORTLINK = "/shortlinks/:id"
 export const SHORTLINK_VISITS = "/shortlinks/:id/visits"
 
-export const routes = [USERS, USER, SHORTLINKS, SHORTLINK, SHORTLINK_VISITS] as const
+export const routes = [USERS, USER, SHORTLINKS, SHORTLINK, SHORTLINK_VISITS] as const satisfies `/${string}`[]
 export type Route = (typeof routes)[number]
