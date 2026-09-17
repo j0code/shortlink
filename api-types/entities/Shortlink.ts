@@ -5,7 +5,7 @@ export const shortlinkSchema = v.object({
 	id: v.string(),
 	url: v.string(),
 	owner_id: v.nullable(v.string()),
-	restricted: v.pipe(v.union([v.literal(1), v.literal(0)]), v.toBoolean()),
+	restricted: v.boolean(),
 	created_at: isoDate,
 	expires_at: v.nullable(isoDate),
 })

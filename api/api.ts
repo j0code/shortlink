@@ -27,6 +27,14 @@ export default class API {
 		return this.$post(routes.SHORTLINKS, {}, { url, claim, restricted, expires_at })
 	}
 
+	fetchShortlink(id: string) {
+		return this.$get(routes.SHORTLINK, { id })
+	}
+
+	fetchShortlinkVisits(id: string) {
+		return this.$get(routes.SHORTLINK_VISITS, { id })
+	}
+
 	deleteShortlink(id: string) {
 		return this.$delete(routes.SHORTLINK, { id })
 	}

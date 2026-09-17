@@ -1,10 +1,10 @@
 import Database, { type Statement } from "better-sqlite3"
 import { readFile, mkdir } from "node:fs/promises"
 import * as v from "@valibot/valibot"
-import { type Shortlink, type ShortlinkInfo, shortlinkSchema, userSchema, type Visit, visitSchema } from "@j0code/shortlink-api-types"
+import { type Shortlink, type ShortlinkInfo, userSchema, type Visit, visitSchema } from "@j0code/shortlink-api-types"
 import { DB_PATH, INIT_SQL_PATH, STORAGE_DIR } from "../constants.ts"
 import { isoDateToMs, normalizeIsoDate, now } from "../time.ts"
-import { visitCountSchema } from "./schemas.ts"
+import { dbShortlinkSchema, dbVisitCountSchema } from "./schemas.ts"
 
 const initSql = await readFile(INIT_SQL_PATH, "utf-8")
 console.log("initSql", initSql)
@@ -43,7 +43,7 @@ export function createShortlink(id: string, url: string, owner_id: string | null
 }
 
 export function getShortlink(id: string): Shortlink | null {
-	const shortlink = getAndParse(queries.getShortlink, { id }, shortlinkSchema, "shortlink")
+	const shortlink = getAndParse(queries.getShortlink, { id }, dbShortlinkSchema, "shortlink")
 
 	if (!shortlink) {
 		return null
@@ -75,7 +75,7 @@ export function deleteShortlink(id: string) {
 }
 
 export function getShortlinksFor(owner_id: string): Shortlink[] {
-	return getAllAndParse(queries.getShortlinksFor, { owner_id }, shortlinkSchema, "shortlink")
+	return getAllAndParse(queries.getShortlinksFor, { owner_id }, dbShortlinkSchema, "shortlink")
 }
 
 export function getShortlinkInfosFor(owner_id: string): ShortlinkInfo[] {
@@ -103,7 +103,7 @@ export function countVisits(shortlink_id: string): number {
 		return 0
 	}
 
-	return parse(visitCountSchema, "visit count", data)?.count ?? 0
+	return parse(dbVisitCountSchema, "visit count", data)?.count ?? 0
 }
 
 function parse<
