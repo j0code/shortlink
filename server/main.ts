@@ -60,8 +60,12 @@ app.get("/users/:id/shortlinks", (req, res) => {
 
 app.get("/:id", (req, res, next) => {
 	const ua = new UserAgent(req.headers["user-agent"] ?? "")
+	const referrer = req.headers["referer"]
 	const id = req.params.id
 	const shortlink = getShortlink(id)
+
+	console.log("shortlink used!", id, referrer)
+	console.log(req.headers)
 
 	if (!shortlink) {
 		next()
@@ -69,7 +73,7 @@ app.get("/:id", (req, res, next) => {
 	}
 
 	res.redirect(shortlink.url)
-	recordVisit(id, ua.browser.name ?? null, ua.os.name ?? null, ua.cpu.architecture ?? null, ua.engine.name ?? null)
+	recordVisit(id, ua.browser.name ?? null, ua.os.name ?? null, ua.cpu.architecture ?? null, ua.engine.name ?? null, referrer ?? null)
 })
 
 app.use(express.static("public"))

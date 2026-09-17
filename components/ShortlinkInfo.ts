@@ -34,6 +34,7 @@ function generateVisitsTable(visits: Visit[]) {
 			<td>${visit.os ?? "Unknown"}</td>
 			<td>${visit.cpu ?? "Unknown"}</td>
 			<td>${visit.engine ?? "Unknown"}</td>
+			<td>${visit.referrer ?? ""}</td>
 		</tr>
 	`).join("\n")
 
@@ -46,6 +47,7 @@ function generateVisitsTable(visits: Visit[]) {
 			<th>OS</th>
 			<th>CPU</th>
 			<th>Engine</th>
+			<th>Referrer URL</th>
 		</tr>
 	</thead>
 	<tbody>

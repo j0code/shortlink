@@ -7,6 +7,7 @@ export const visitSchema = v.object({
 	os: v.nullable(v.string()),
 	cpu: v.nullable(v.string()),
 	engine: v.nullable(v.string()),
+	referrer: v.nullable(v.string()),
 	visited_at: isoDate,
 })
 

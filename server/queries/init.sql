@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS visits (
 	os STRING,
 	cpu STRING,
 	engine STRING,
+	referrer STRING,
 	visited_at TIMESTAMP NOT NULL,
 	FOREIGN KEY (shortlink_id) REFERENCES shortlinks(id)
 );

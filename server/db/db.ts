@@ -23,7 +23,7 @@ const queries = {
 	getShortlink: db.prepare("SELECT * FROM shortlinks WHERE id = @id"),
 	getShortlinksFor: db.prepare("SELECT * FROM shortlinks WHERE owner_id = @owner_id"),
 	deleteShortlink: db.prepare("DELETE FROM shortlinks WHERE id = @id"),
-	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine, visited_at) VALUES (@shortlink_id, @browser, @os, @cpu, @engine, @visited_at)"),
+	insertVisit: db.prepare("INSERT INTO visits (shortlink_id, browser, os, cpu, engine, referrer, visited_at) VALUES (@shortlink_id, @browser, @os, @cpu, @engine, @referrer, @visited_at)"),
 	getVisits: db.prepare("SELECT * FROM visits WHERE shortlink_id = @shortlink_id ORDER BY visited_at DESC LIMIT @limit"),
 	countVisits: db.prepare("SELECT COUNT(*) as count FROM visits WHERE shortlink_id = @shortlink_id"),
 	deleteVisitsFor: db.prepare("DELETE FROM visits WHERE shortlink_id = @shortlink_id"),
@@ -86,8 +86,8 @@ export function getShortlinkInfosFor(owner_id: string): ShortlinkInfo[] {
 	})
 }
 
-export function recordVisit(shortlink_id: string, browser: string | null, os: string | null, cpu: string | null, engine: string | null) {
-	queries.insertVisit.run({ shortlink_id, browser, os, cpu, engine, visited_at: now() })
+export function recordVisit(shortlink_id: string, browser: string | null, os: string | null, cpu: string | null, engine: string | null, referrer: string | null) {
+	queries.insertVisit.run({ shortlink_id, browser, os, cpu, engine, referrer, visited_at: now() })
 }
 
 export function getVisits(shortlink_id: string, limit: number): Visit[] {
