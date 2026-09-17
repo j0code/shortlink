@@ -41,24 +41,13 @@ export const resources = {
 	}
 } as const satisfies Record<routes.Route, Partial<Record<Method, ResourceSchemas>>>
 
+export type APIRequestDataSchema = ObjectSchema | typeof emptySchema
+export type APIResponseDataSchema = ObjectSchema | IntersectSchema<ObjectSchema[]> | ArraySchema<ObjectSchema>
+
 type ResourceSchemas = {
-	request: ObjectSchema | typeof emptySchema
-	response: ObjectSchema | IntersectSchema | ArraySchema
+	request: APIRequestDataSchema
+	response: APIResponseDataSchema
 }
-
-export type Request<TRoute extends routes.Route, TMethod extends Method> =
-	TRoute extends unknown
-	? (typeof resources)[TRoute] extends { [K in TMethod]: ResourceSchemas }
-		? v.InferOutput<(typeof resources)[TRoute][TMethod]["request"]>
-		: never
-	: never
-
-export type Response<TRoute extends routes.Route, TMethod extends Method> =
-	TRoute extends unknown
-	? (typeof resources)[TRoute] extends { [K in TMethod]: ResourceSchemas }
-		? v.InferOutput<(typeof resources)[TRoute][TMethod]["response"]>
-		: never
-	: never
 
 type Filter<TMethod extends Method, TRoute extends routes.Route = routes.Route> =
 	TRoute extends unknown
@@ -70,3 +59,20 @@ type Filter<TMethod extends Method, TRoute extends routes.Route = routes.Route> 
 export type GETRoute = Filter<"GET">
 export type POSTRoute = Filter<"POST">
 export type DELETERoute = Filter<"DELETE">
+
+export type RequestSchema<TRoute extends routes.Route, TMethod extends Method> =
+	TRoute extends unknown
+	? (typeof resources)[TRoute] extends { [K in TMethod]: ResourceSchemas }
+		? (typeof resources)[TRoute][TMethod]["request"]
+		: never
+	: never
+
+export type ResponseSchema<TRoute extends routes.Route, TMethod extends Method> =
+	TRoute extends unknown
+	? (typeof resources)[TRoute] extends { [K in TMethod]: ResourceSchemas }
+		? (typeof resources)[TRoute][TMethod]["response"]
+		: never
+	: never
+
+export type Request<TRoute extends routes.Route, TMethod extends Method> = v.InferOutput<RequestSchema<TRoute, TMethod>>
+export type Response<TRoute extends routes.Route, TMethod extends Method> = v.InferOutput<ResponseSchema<TRoute, TMethod>>

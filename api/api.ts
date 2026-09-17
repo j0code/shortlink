@@ -1,7 +1,7 @@
 import * as routes from "@j0code/shortlink-api-types/routes"
-import type { Params, GETRoute, POSTRoute, DELETERoute } from "@j0code/shortlink-api-types"
-import { resources } from "@j0code/shortlink-api-types"
-import * as v from "@valibot/valibot"
+import type { Params, GETRoute, POSTRoute, DELETERoute, APIResponseDataSchema, ResponseSchema } from "@j0code/shortlink-api-types"
+import { parseAPIResponse, resources } from "@j0code/shortlink-api-types"
+import { ValiError } from "@valibot/valibot"
 
 export default class API {
 
@@ -31,24 +31,24 @@ export default class API {
 		return this.$delete(routes.SHORTLINK, { id })
 	}
 
-	$get(route: GETRoute, params: Params) {
-		const schema = resources[route]["GET"].response
+	$get<TRoute extends GETRoute>(route: TRoute, params: Params) {
+		const schema = resources[route]["GET"].response as ResponseSchema<TRoute, "GET">
 		return get(this.baseUrl, routes.substitute(route, params), this.auth, schema)
 	}
 
-	$delete(route: DELETERoute, params: Params) {
-		const schema = resources[route]["DELETE"].response
+	$delete<TRoute extends DELETERoute>(route: TRoute, params: Params) {
+		const schema = resources[route]["DELETE"].response as ResponseSchema<TRoute, "DELETE">
 		return del(this.baseUrl, routes.substitute(route, params), this.auth, schema)
 	}
 
-	$post(route: POSTRoute, params: Params, payload: unknown) {
-		const schema = resources[route]["POST"].response
+	$post<TRoute extends POSTRoute>(route: TRoute, params: Params, payload: unknown) {
+		const schema = resources[route]["POST"].response as ResponseSchema<TRoute, "POST">
 		return post(this.baseUrl, routes.substitute(route, params), this.auth, payload, schema)
 	}
 
 }
 
-function get<TSchema extends v.GenericSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
+function get<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
 	const headers: HeadersInit = {}
 
 	if (auth) {
@@ -61,7 +61,7 @@ function get<TSchema extends v.GenericSchema>(baseUrl: string, route: string, au
 	}, schema)
 }
 
-function del<TSchema extends v.GenericSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
+function del<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
 	const headers: HeadersInit = {}
 
 	if (auth) {
@@ -74,7 +74,7 @@ function del<TSchema extends v.GenericSchema>(baseUrl: string, route: string, au
 	}, schema)
 }
 
-function post<TSchema extends v.GenericSchema>(baseUrl: string, route: string, auth: string | null, payload: unknown, schema: TSchema) {
+function post<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, auth: string | null, payload: unknown, schema: TSchema) {
 	console.log("payload", payload)
 	const headers: HeadersInit = {
 		"Content-Type": "application/json"
@@ -98,11 +98,17 @@ export async function getKey(password: string) {
 	return new Uint8Array(digest).toHex()
 }
 
-async function call<TSchema extends v.GenericSchema>(baseUrl: string, route: string, init: RequestInit, schema: TSchema): Promise<v.InferOutput<typeof schema>> {
+async function call<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, init: RequestInit, schema: TSchema) {
 	const url = `${baseUrl}${route}`
 
 	const res = await fetch(url, init)
 	const body = await res.json()
+	const result = parseAPIResponse(schema, body)
 
-	return v.parse(schema, body)
+	if (!result.success) {
+		console.error(`Server returned invalid response for ${route}:`, body)
+		throw new ValiError(result.issues)
+	}
+
+	return result.output
 }
