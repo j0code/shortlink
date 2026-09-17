@@ -1,9 +1,10 @@
 import Database, { type Statement } from "better-sqlite3"
 import { readFile, mkdir } from "node:fs/promises"
 import * as v from "@valibot/valibot"
-import { type Shortlink, type ShortlinkInfo, shortlinkSchema, userSchema, type Visit, visitCountSchema, visitSchema } from "./schemas.ts"
+import { type Shortlink, type ShortlinkInfo, shortlinkSchema, userSchema, type Visit, visitSchema } from "@j0code/shortlink-api-types"
 import { DB_PATH, INIT_SQL_PATH, STORAGE_DIR } from "../constants.ts"
 import { isoDateToMs, normalizeIsoDate, now } from "../time.ts"
+import { visitCountSchema } from "./schemas.ts"
 
 const initSql = await readFile(INIT_SQL_PATH, "utf-8")
 console.log("initSql", initSql)

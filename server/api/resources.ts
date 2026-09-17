@@ -1,25 +1,27 @@
 import type { Application, Request, Response } from "express"
 import type APIResource from "./APIResource.ts"
-import type { APIResponse, Method, Params } from "./types.ts"
 import users from "./resources/users.ts"
 import shortlinks from "./resources/shortlinks.ts"
 import shortlink from "./resources/shortlink.ts"
-import visits from "./resources/visits.ts"
+import visits from "./resources/shortlink_visits.ts"
 import { apiAuth } from "../auth.ts"
+import type { APIResponse, Method, Params } from "@j0code/shortlink-api-types"
+import type { Route } from "@j0code/shortlink-api-types/routes"
 
-const resources: APIResource[] = [
+const resources = [
 	new users(),
 	new shortlinks(),
 	new shortlink(),
 	new visits()
-]
+] as const
 
 export function registerResources(app: Application) {
 	resources.forEach(resource => {
 		resource.supportedMethods.forEach(method => {
 			const lowerMethod = method.toLowerCase() as Lowercase<Method>
+			const fullRoute = new URL(resource.route, "http://shortlink/api/v0").pathname
 
-			app[lowerMethod](resource.route, async (req, res) => {
+			app[lowerMethod](fullRoute, async (req, res) => {
 				const user = apiAuth(req.headers.authorization, req.headers.cookie)
 				console.log("user:", user)
 
@@ -41,7 +43,7 @@ export function registerResources(app: Application) {
 	})
 }
 
-function headers(req: Request, res: Response, resource: APIResource) {
+function headers(req: Request, res: Response, resource: APIResource<Route>) {
 	cors(req, res)
 	res.appendHeader("Allow", resource.supportedMethods.values().toArray().join(", "))
 }

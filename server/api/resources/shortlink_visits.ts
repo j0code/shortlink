@@ -4,7 +4,7 @@ import { success } from "@j0code/shortlink-api-types"
 import type { Params } from "@j0code/shortlink-api-types"
 import { SHORTLINK_VISITS } from "@j0code/shortlink-api-types/routes"
 
-export default class GetShortlink extends APIResource {
+export default class ShortlinkVisitsResource extends APIResource<typeof SHORTLINK_VISITS> {
 
 	constructor() {
 		super(SHORTLINK_VISITS, ["GET"])

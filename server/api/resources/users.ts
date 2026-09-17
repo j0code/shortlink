@@ -5,7 +5,7 @@ import { generateId } from "../../ids.ts"
 import { createUser, getUser } from "../../db/db.ts"
 import { USERS } from "@j0code/shortlink-api-types/routes"
 
-export default class CreateShortlink extends APIResource {
+export default class UsersResource extends APIResource<typeof USERS> {
 
 	constructor() {
 		super(USERS, ["POST"])

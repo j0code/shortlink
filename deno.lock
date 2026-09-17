@@ -5,7 +5,7 @@
     "jsr:@denosaurs/plug@^1.1.0": "1.1.0",
     "jsr:@duesabati/esbuild-deno-plugin@0.2.6": "0.2.6",
     "jsr:@felix/argon2@^3.0.6": "3.0.6",
-    "jsr:@j0code/yson@^1.2.6": "1.2.6",
+    "jsr:@j0code/yson@^1.2.7": "1.2.7",
     "jsr:@std/assert@1": "1.0.19",
     "jsr:@std/cli@^1.0.15": "1.0.32",
     "jsr:@std/cli@^1.0.32": "1.0.32",
@@ -33,7 +33,7 @@
     "jsr:@std/path@^1.1.5": "1.1.6",
     "jsr:@std/path@^1.1.6": "1.1.6",
     "jsr:@std/streams@^1.1.2": "1.1.2",
-    "jsr:@valibot/valibot@^1.4.2": "1.4.2",
+    "jsr:@valibot/valibot@^1.4.2": "1.5.0",
     "jsr:@valibot/valibot@^1.5.0": "1.5.0",
     "npm:@types/better-sqlite3@^9.6.0": "9.6.0",
     "npm:@types/chrome@0.0.268": "0.0.268",
@@ -78,8 +78,8 @@
         "jsr:@denosaurs/plug"
       ]
     },
-    "@j0code/yson@1.2.6": {
-      "integrity": "b05ae528cbea93f52e40b021ac5d1d145ef19598e75c125c7d44b8345d289930"
+    "@j0code/yson@1.2.7": {
+      "integrity": "38c33d8e76330bb11514547963b4aebe162b9b1e5bcd2753b22d756c5e512cab"
     },
     "@std/assert@1.0.19": {
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
@@ -818,7 +818,7 @@
       "server": {
         "dependencies": [
           "jsr:@felix/argon2@^3.0.6",
-          "jsr:@j0code/yson@^1.2.6",
+          "jsr:@j0code/yson@^1.2.7",
           "jsr:@std/assert@1",
           "jsr:@std/encoding@^1.0.11",
           "jsr:@std/http@^1.1.3",

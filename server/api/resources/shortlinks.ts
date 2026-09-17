@@ -1,19 +1,18 @@
 import APIResource from "../APIResource.ts"
 import * as v from "@valibot/valibot"
 import { createShortlink, getShortlink } from "../../db/db.ts"
-import { error, success } from "@j0code/shortlink-api-types"
+import { error, shortlinksPostRequestSchema, success, type User } from "@j0code/shortlink-api-types"
 import { generateId } from "../../ids.ts"
-import type { User } from "../../db/schemas.ts"
 import { SHORTLINKS } from "@j0code/shortlink-api-types/routes"
 
-export default class CreateShortlink extends APIResource {
+export default class ShortlinksResource extends APIResource<typeof SHORTLINKS> {
 
 	constructor() {
 		super(SHORTLINKS, ["POST"])
 	}
 
 	override post(body: unknown, _params: unknown, user: User | null) {
-		const result = v.safeParse(schema, body)
+		const result = v.safeParse(shortlinksPostRequestSchema, body)
 
 		if (!result.success) {
 			const summary = v.summarize(result.issues)
@@ -34,16 +33,3 @@ export default class CreateShortlink extends APIResource {
 	}
 
 }
-
-const schema = v.object({
-	url: v.pipe(
-		v.string(),
-		v.url("Invalid URL"),
-	),
-	claim: v.boolean(),
-	restricted: v.boolean(),
-	expires_at: v.nullable(v.pipe(
-		v.string(),
-		v.isoTimestamp(),
-	))
-})
