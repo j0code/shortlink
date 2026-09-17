@@ -1,12 +1,13 @@
 import config from "./config/config.ts"
-import express from "express"
+import express, { Response } from "express"
 import homepage from "./pages/home.ts"
 import inspectPage from "./pages/inspect.ts"
 import { registerResources } from "./api/resources.ts"
 import { getShortlink, getShortlinkInfo, getShortlinkInfosFor, getVisits, recordVisit } from "./db/db.ts"
 import { UserAgent } from "@std/http/user-agent"
-import { cookieAuth } from "./auth.ts"
+import { authorized, AuthType, cookieAuth } from "./auth.ts"
 import userShortlinksPage from "./pages/shortlinks.ts"
+import { shortlinkReadPermission } from "./api/resources/shortlink.ts"
 
 console.log("CONFIG", config)
 
@@ -26,39 +27,29 @@ app.get("/inspect/:id", (req, res) => {
 	const { id } = req.params
 	const user = cookieAuth(req.headers.cookie)
 	const info = getShortlinkInfo(id)
-	const visits = getVisits(id, 10)
 
 	if (!info) {
 		res.status(404).send("Shortlink not found")
 		return
 	}
 
-	if (info.restricted && (!user || user.id !== info.owner_id)) {
-		if (!user) {
-			res.status(401).send("Unauthenticated")
-			return
-		}
-
-		if (user.id !== info.owner_id) {
-			res.status(403).send("Unauthorized")
-			return
-		}
+	const { auth } = shortlinkReadPermission(info, user)
+	if (auth != "Authorized") {
+		authError(auth, res)
+		return
 	}
+
+	const visits = getVisits(id, 10)
 
 	res.status(200).send(inspectPage(info, visits))
 })
 
 app.get("/users/:id/shortlinks", (req, res) => {
 	const { id } = req.params
-	const user = cookieAuth(req.headers.cookie)
 
-	if (!user) {
-		res.status(401).send("Unauthenticated")
-		return
-	}
-
-	if (id != "@me" && user.id != id) {
-		res.status(403).send("Unauthorized")
+	const { auth, user } = authorized(cookieAuth(req.headers.cookie), user => id == "@me" || id == user.id)
+	if (auth != "Authorized") {
+		authError(auth, res)
 		return
 	}
 
@@ -86,3 +77,14 @@ app.use(express.static("public"))
 app.listen(config.port, config.hostname, () => {
 	console.log("INFO", `Listening on http://${config.hostname}:${config.port}`)
 })
+
+function authError(auth: Exclude<AuthType, "Authorized">, res: Response) {
+	switch (auth) {
+		case "Unauthenticated":
+			res.status(401).send("Unauthenticated")
+			return
+		case "Unauthorized":
+			res.status(403).send("Unauthorized")
+			return
+	}
+}

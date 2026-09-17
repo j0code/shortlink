@@ -1,8 +1,9 @@
 {
-	"name": "@j0code/shortlink-api",
+	"name": "@j0code/shortlink-api-types",
 	"version": "0.0.1",
 	"exports": {
-		".": "./api.ts"
+		".": "./main.ts",
+		"./routes": "./routes.ts"
 	},
 	"imports": {
 		"@valibot/valibot": "jsr:@valibot/valibot@^1.5.0"

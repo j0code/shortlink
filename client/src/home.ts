@@ -25,7 +25,7 @@ createForm.addEventListener("submit", async event => {
 		return
 	}
 
-	const shortlinkUrl = new URL(result.result.id, api.baseUrl).href
+	const shortlinkUrl = new URL(`/${result.result.id}`, api.baseUrl).href
 	const shortlinkOutput   = createForm.elements.namedItem("shortlink")   as HTMLInputElement
 	const shortlinkIdOutput = createForm.elements.namedItem("shortlinkId") as HTMLInputElement
 	const linkButton = shortlinkOutput.nextElementSibling!.children[0] as HTMLAnchorElement
@@ -90,4 +90,5 @@ function setCookies(id: string, key: string) {
 installCopyEventListeners()
 console.log("cookies", document.cookie)
 
+// @ts-ignore: debugging
 globalThis.api = api

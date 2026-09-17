@@ -1,13 +1,14 @@
 import APIResource from "../APIResource.ts"
 import { deleteShortlink, getShortlinkInfo } from "../../db/db.ts"
-import { error, success } from "../types.ts"
-import type { Params } from "../types.ts"
-import type { User } from "../../db/schemas.ts"
+import { error, success } from "@j0code/shortlink-api-types"
+import type { Params, ShortlinkInfo, User } from "@j0code/shortlink-api-types"
+import { SHORTLINK } from "@j0code/shortlink-api-types/routes"
+import { authError, authorized, type AuthState } from "../../auth.ts"
 
-export default class GetShortlink extends APIResource {
+export default class ShortlinkResource extends APIResource<typeof SHORTLINK> {
 
 	constructor() {
-		super("/api/v0/shortlinks/:id", ["GET", "DELETE"])
+		super(SHORTLINK, ["GET", "DELETE"])
 	}
 
 	override get(_body: unknown, params: Params, user: User | null) {
@@ -17,15 +18,8 @@ export default class GetShortlink extends APIResource {
 			return error("Shortlink not found", 404)
 		}
 
-		if (info.restricted && (!user || user.id !== info.owner_id)) {
-			if (!user) {
-				return error("Unauthenticated", 401)
-			}
-
-			if (user.id !== info.owner_id) {
-				return error("Unauthorized", 403)
-			}
-		}
+		const { auth } = shortlinkReadPermission(info, user)
+		if (auth != "Authorized") return authError(auth)
 
 		return success(info)
 	}
@@ -37,17 +31,17 @@ export default class GetShortlink extends APIResource {
 			return error("Shortlink not found", 404)
 		}
 
-		if (!user) {
-			return error("Unauthenticated", 401)
-		}
-
-		if (user.id !== info.owner_id) {
-			return error("Unauthorized", 403)
-		}
+		const { auth } = authorized(user, user => user.id == info.owner_id)
+		if (auth != "Authorized") return authError(auth)
 
 		deleteShortlink(params.id)
 
 		return success(info)
 	}
 
+}
+
+export function shortlinkReadPermission(info: ShortlinkInfo, user: User | null): AuthState | { auth: "Authorized", user: User | null } {
+	if (!info.restricted) return { auth: "Authorized", user }
+	return authorized(user, user => user.id == info.owner_id)
 }
