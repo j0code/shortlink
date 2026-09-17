@@ -22,3 +22,5 @@ export const errorStatusSchema = v.union([
 
 export type SuccessStatus = v.InferOutput<typeof successStatusSchema>
 export type ErrorStatus = v.InferOutput<typeof errorStatusSchema>
+
+export const emptySchema = v.optional(v.object({}))

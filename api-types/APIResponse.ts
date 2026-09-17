@@ -1,5 +1,6 @@
 import { errorStatusSchema, successStatusSchema, type ErrorStatus, type SuccessStatus } from "./base.ts"
 import * as v from "@valibot/valibot"
+import { ArraySchema, ObjectSchema } from "./helpers.ts"
 
 export type APIResponse<T = unknown> = {
 	success: true,
@@ -33,16 +34,6 @@ const apiResponseSchema = v.variant("success", [
 		details: v.optional(v.unknown())
 	})
 ])
-
-type ObjectSchema<
-	TEntries extends v.ObjectEntries = v.ObjectEntries,
-	TMessage extends v.ErrorMessage<v.ObjectIssue> | undefined = v.ErrorMessage<v.ObjectIssue> | undefined
-> = v.ObjectSchema<TEntries, TMessage>
-
-type ArraySchema<
-	TItem extends ObjectSchema = ObjectSchema,
-	TMessage extends v.ErrorMessage<v.ArrayIssue> | undefined = v.ErrorMessage<v.ArrayIssue> | undefined
-> = v.ArraySchema<TItem, TMessage>
 
 type ParseResult<TSchema extends ObjectSchema | ArraySchema> = {
 	success: true,
