@@ -1,4 +1,4 @@
-import type { ShortlinkInfo } from "../server/db/schemas.ts"
+import { ShortlinkInfo } from "@j0code/shortlink-api-types"
 import ActionButton from "./ActionButton.ts"
 
 export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {

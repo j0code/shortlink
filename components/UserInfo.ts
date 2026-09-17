@@ -1,4 +1,4 @@
-import { User } from "../server/db/schemas.ts"
+import { User } from "@j0code/shortlink-api-types"
 
 export function UserInfo(user: User) {
 	return `

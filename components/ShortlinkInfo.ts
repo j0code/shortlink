@@ -1,5 +1,5 @@
-import type { ShortlinkInfo, Visit } from "../server/db/schemas.ts"
 import { CopyableLink } from "./CopyableLink.ts"
+import type { ShortlinkInfo, Visit } from "@j0code/shortlink-api-types"
 
 export function generateShortlinkInfo(baseUrl: string, shortlink: ShortlinkInfo, visits: Visit[]) {
 	const createdAt = new Date(shortlink.created_at).toISOString()
