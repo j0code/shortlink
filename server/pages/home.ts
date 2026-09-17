@@ -1,7 +1,7 @@
 import config from "../config/config.ts"
 import { CreateShortlinkForm, InspectShortlinkForm, LoginForm, UserInfo, generateHead, generateFooter } from "@j0code/shortlink-components"
 import info from "../package_info.ts"
-import type { User } from "../db/schemas.ts"
+import type { User } from "@j0code/shortlink-api-types"
 
 const footer = generateFooter(info)
 const branding = config.branding

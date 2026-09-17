@@ -1,7 +1,7 @@
 import { generateHead, generateShortlinkInfo, generateFooter } from "@j0code/shortlink-components"
-import type { ShortlinkInfo, Visit } from "../db/schemas.ts"
 import info from "../package_info.ts"
 import config from "../config/config.ts"
+import type { ShortlinkInfo, Visit } from "@j0code/shortlink-api-types"
 
 const footer = generateFooter(info)
 

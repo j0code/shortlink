@@ -3,7 +3,7 @@ import type APIResource from "./APIResource.ts"
 import users from "./resources/users.ts"
 import shortlinks from "./resources/shortlinks.ts"
 import shortlink from "./resources/shortlink.ts"
-import visits from "./resources/shortlink_visits.ts"
+import shortlink_visits from "./resources/shortlink_visits.ts"
 import { apiAuth } from "../auth.ts"
 import type { APIResponse, Method, Params } from "@j0code/shortlink-api-types"
 import type { Route } from "@j0code/shortlink-api-types/routes"
@@ -12,7 +12,7 @@ const resources = [
 	new users(),
 	new shortlinks(),
 	new shortlink(),
-	new visits()
+	new shortlink_visits()
 ] as const
 
 export function registerResources(app: Application) {
