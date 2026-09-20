@@ -1,5 +1,5 @@
-import { ShortlinkInfo } from "@j0code/shortlink-api-types"
-import ActionButton from "./ActionButton.ts"
+import type { ShortlinkInfo } from "@j0code/shortlink-api-types"
+import { ActionButton } from "./ActionButton.ts"
 
 export function UserShortlinksTable(shortlinks: ShortlinkInfo[]) {
 	if (shortlinks.length === 0) {

@@ -1,7 +1,7 @@
 const units = ["years", "months", "days", "hours", "minutes", "seconds"]
 const timeElements = document.querySelectorAll("time")
 
-export function evaluteTimeElements() {
+export function evaluateTimeElements() {
 	timeElements.forEach(element => {
 		let output: string
 		if (element.hasAttribute("data-relative")) {

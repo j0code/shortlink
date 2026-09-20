@@ -1,5 +1,6 @@
 import API, { getKey } from "@j0code/shortlink-api"
 import { installCopyEventListeners } from "./copyable.ts"
+import { installNavbarListeners } from "./navbar.ts"
 
 const createForm  = document.querySelector("#create-shortlink")  as HTMLFormElement
 const inspectForm = document.querySelector("#inspect-shortlink") as HTMLFormElement
@@ -88,6 +89,7 @@ function setCookies(id: string, key: string) {
 }
 
 installCopyEventListeners()
+installNavbarListeners()
 console.log("cookies", document.cookie)
 
 // @ts-ignore: debugging

@@ -1,9 +1,11 @@
 import API from "@j0code/shortlink-api"
 import { installCopyEventListeners } from "./copyable.ts"
-import { evaluteTimeElements } from "./time.ts"
+import { evaluateTimeElements } from "./time.ts"
+import { installNavbarListeners } from "./navbar.ts"
 
-evaluteTimeElements()
+evaluateTimeElements()
 installCopyEventListeners()
+installNavbarListeners()
 installEventListeners(".delete-shortlink", deleteShortlink)
 installEventListeners(".inspect-shortlink", inspectShortlink)
 
@@ -40,5 +42,5 @@ function inspectShortlink(button: HTMLButtonElement) {
 		return
 	}
 	
-	open(`/inspect/${id}`, "_blank", "noopener=true")
+	open(`/inspect/${id}`, "_blank", "noopener=true,noreferrer=true")
 }

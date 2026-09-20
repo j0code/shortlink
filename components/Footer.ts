@@ -1,4 +1,4 @@
-type PackageInfo = {
+export type PackageInfo = {
 	name:    string,
 	version: string,
 	commit:  string,

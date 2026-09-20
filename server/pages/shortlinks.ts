@@ -1,4 +1,4 @@
-import { generateHead, generateFooter, UserShortlinksTable } from "@j0code/shortlink-components"
+import { generateHead, generateFooter, UserShortlinksTable, NavBar } from "@j0code/shortlink-components"
 import info from "../package_info.ts"
 import type { ShortlinkInfo } from "@j0code/shortlink-api-types"
 
@@ -14,6 +14,7 @@ export default function userShortlinksPage(shortlinks: ShortlinkInfo[]) {
 	${head}
 	<body>
 		<div id="card" class="wide">
+			${NavBar(["back", "home"])}
 			<h1>My Shortlinks</h1>
 			<main>
 				${UserShortlinksTable(shortlinks)}

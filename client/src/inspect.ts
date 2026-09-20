@@ -1,5 +1,7 @@
 import { installCopyEventListeners } from "./copyable.ts"
-import { evaluteTimeElements } from "./time.ts"
+import { installNavbarListeners } from "./navbar.ts"
+import { evaluateTimeElements } from "./time.ts"
 
-evaluteTimeElements()
+evaluateTimeElements()
 installCopyEventListeners()
+installNavbarListeners()

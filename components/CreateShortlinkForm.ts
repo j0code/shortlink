@@ -1,6 +1,6 @@
 import { CopyableOutputLink } from "./CopyableLink.ts"
 
-export default function CreateShortlinkForm(loggedIn: boolean) {
+export function CreateShortlinkForm(loggedIn: boolean) {
 	return `
 <form id="create-shortlink" autocomplete="off">
 	<h3>Create new shortlink</h3>

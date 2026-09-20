@@ -178,8 +178,6 @@ footer {
 }
 
 .action-button {
-	height: fit-content;
-	width: fit-content;
 	padding: 0px;
 	margin: 0px;
 	background: none;
@@ -187,6 +185,10 @@ footer {
 	width: 1.25em;
 	height: 1.25em;
 	outline-offset: 3px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-radius: 100%;
 
 	> svg {
 		width: 1.25em;
@@ -196,7 +198,6 @@ footer {
 
 a.action-button {
 	color: var(--text-color);
-	border-radius: 100%;
 
 	&:visited {
 		color: var(--text-color);
@@ -209,4 +210,19 @@ output:empty ~ span > a {
 
 .delete-shortlink {
 	color: var(--red-button-color);
+}
+
+#navbar {
+	position: absolute;
+	display: flex;
+}
+
+.navbar-button {
+	width: 2em;
+	height: 2em;
+	outline-offset: 0px;
+
+	&:hover {
+		background: var(--hover-color);
+	}
 }

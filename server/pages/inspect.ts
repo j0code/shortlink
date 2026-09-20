@@ -1,4 +1,4 @@
-import { generateHead, generateShortlinkInfo, generateFooter } from "@j0code/shortlink-components"
+import { generateHead, generateShortlinkInfo, generateFooter, NavBar } from "@j0code/shortlink-components"
 import info from "../package_info.ts"
 import config from "../config/config.ts"
 import type { ShortlinkInfo, Visit } from "@j0code/shortlink-api-types"
@@ -16,6 +16,7 @@ export default function inspectPage(shortlink: ShortlinkInfo, visits: Visit[]) {
 	${head}
 	<body>
 		<div id="card">
+			${NavBar(["back", "home"])}
 			<h1>Inspect Shortlink</h1>
 			<main>
 				${shortlinkInfo}

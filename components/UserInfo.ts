@@ -1,4 +1,4 @@
-import { User } from "@j0code/shortlink-api-types"
+import type { User } from "@j0code/shortlink-api-types"
 
 export function UserInfo(user: User) {
 	return `

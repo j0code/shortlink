@@ -1,4 +1,4 @@
-const LoginForm = `
+export const LoginForm = `
 <form id="login" autocomplete="on">
 	<h3>Login</h3>
 	<label>
@@ -11,5 +11,3 @@ const LoginForm = `
 	<button>Login</button>
 </form>
 `.trim()
-
-export default LoginForm

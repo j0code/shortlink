@@ -1,5 +1,5 @@
 import config from "../config/config.ts"
-import { CreateShortlinkForm, InspectShortlinkForm, LoginForm, UserInfo, generateHead, generateFooter } from "@j0code/shortlink-components"
+import { CreateShortlinkForm, InspectShortlinkForm, LoginForm, UserInfo, generateHead, generateFooter, NavBar } from "@j0code/shortlink-components"
 import info from "../package_info.ts"
 import type { User } from "@j0code/shortlink-api-types"
 
@@ -15,6 +15,7 @@ export default function homepage(user: User | null = null) {
 ${generateHead("home")}
 <body>
 	<div id="card">
+		${NavBar([])}
 		<h1>${branding.name}</h1>
 		<main>
 			<div class="divider"></div>

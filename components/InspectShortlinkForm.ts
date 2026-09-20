@@ -1,4 +1,4 @@
-const InspectShortlinkForm = `
+export const InspectShortlinkForm = `
 <form id="inspect-shortlink" autocomplete="off">
 	<h3>Inspect shortlink</h3>
 	<label>
@@ -7,5 +7,3 @@ const InspectShortlinkForm = `
 	<button>Inspect link!</button>
 </form>
 `.trim()
-
-export default InspectShortlinkForm
