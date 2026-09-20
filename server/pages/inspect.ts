@@ -19,6 +19,7 @@ export default function inspectPage(shortlink: ShortlinkInfo, visits: Visit[]) {
 			${NavBar(["back", "home"])}
 			<h1>Inspect Shortlink</h1>
 			<main>
+				<div class="divider"></div>
 				${shortlinkInfo}
 			</main>
 			${footer}

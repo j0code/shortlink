@@ -15,10 +15,10 @@ export function generateShortlinkInfo(baseUrl: string, shortlink: ShortlinkInfo,
 	<p>Created at: <time datetime="${createdAt}"></time></p>
 	<p>Expires at: <span>${expiresText}</span></p>
 	<p>Visit count: <code>${shortlink.visitCount}</code></p>
-	<div class="divider"></div>
-	<h2>Recent Visits</h2>
-	${generateVisitsTable(visits)}
 </div>
+<div class="divider"></div>
+<h2>Recent Visits</h2>
+${generateVisitsTable(visits)}
 	`.trim()
 }
 
@@ -39,7 +39,7 @@ function generateVisitsTable(visits: Visit[]) {
 	`).join("\n")
 
 	return `
-<table>
+<table id="shortlink-visits">
 	<thead>
 		<tr>
 			<th>Timestamp</th>

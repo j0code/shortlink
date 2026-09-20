@@ -17,6 +17,7 @@ export default function userShortlinksPage(shortlinks: ShortlinkInfo[]) {
 			${NavBar(["back", "home"])}
 			<h1>My Shortlinks</h1>
 			<main>
+				<div class="divider"></div>
 				${UserShortlinksTable(shortlinks)}
 			</main>
 			${footer}
