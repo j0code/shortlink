@@ -1,7 +1,10 @@
 import * as routes from "@j0code/shortlink-api-types/routes"
-import type { Params, GETRoute, POSTRoute, DELETERoute, APIResponseDataSchema, ResponseSchema, Request } from "@j0code/shortlink-api-types"
-import { parseAPIResponse, resources } from "@j0code/shortlink-api-types"
-import { ValiError } from "@valibot/valibot"
+import type { Params, GETRoute, POSTRoute, DELETERoute, ResponseSchema, Request } from "@j0code/shortlink-api-types"
+import { resources } from "@j0code/shortlink-api-types"
+import { del, get, post } from "./fetch.ts"
+import { getKey } from "./util.ts"
+
+export * from "./util.ts"
 
 export default class API {
 
@@ -54,69 +57,4 @@ export default class API {
 		return post(this.baseUrl, routes.substitute(route, params), this.auth, payload, schema)
 	}
 
-}
-
-function get<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
-	const headers: HeadersInit = {}
-
-	if (auth) {
-		headers["Authorization"] = auth
-	}
-
-	return call(baseUrl, route, {
-		method: "GET",
-		headers
-	}, schema)
-}
-
-function del<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, auth: string | null, schema: TSchema) {
-	const headers: HeadersInit = {}
-
-	if (auth) {
-		headers["Authorization"] = auth
-	}
-
-	return call(baseUrl, route, {
-		method: "DELETE",
-		headers
-	}, schema)
-}
-
-function post<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, auth: string | null, payload: unknown, schema: TSchema) {
-	console.log("payload", payload)
-	const headers: HeadersInit = {
-		"Content-Type": "application/json"
-	}
-
-	if (auth) {
-		console.log("auth", auth)
-		headers["Authorization"] = auth
-	}
-
-	return call(baseUrl, route, {
-		method: "POST",
-		body: JSON.stringify(payload),
-		headers
-	}, schema)
-}
-
-export async function getKey(password: string) {
-	const pw = new TextEncoder().encode(password)
-	const digest = await crypto.subtle.digest("sha-256", pw)
-	return new Uint8Array(digest).toHex()
-}
-
-async function call<TSchema extends APIResponseDataSchema>(baseUrl: string, route: string, init: RequestInit, schema: TSchema) {
-	const url = `${baseUrl}${route}`
-
-	const res = await fetch(url, init)
-	const body = await res.json()
-	const result = parseAPIResponse(schema, body)
-
-	if (!result.success) {
-		console.error(`Server returned invalid response for ${route}:`, body)
-		throw new ValiError(result.issues)
-	}
-
-	return result.output
 }
