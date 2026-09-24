@@ -5,7 +5,7 @@ export function CreateShortlinkForm(loggedIn: boolean) {
 <form id="create-shortlink" autocomplete="off">
 	<h3>Create new shortlink</h3>
 	<label>
-		URL: <input type="url" name="url" required>
+		Target URL: <input type="text" name="url" inputmode="url" required>
 	</label>
 	<label>
 		Expires:
@@ -26,10 +26,16 @@ export function CreateShortlinkForm(loggedIn: boolean) {
 		</label>
 	</label>
 	<label>
+		Sanitize: <input type="checkbox" name="sanitize" checked >
+	</label>
+	<label>
 		Claim: <input type="checkbox" name="claim" ${loggedIn ? 'checked' : 'disabled title="You must be logged in to claim a shortlink"'} >
 	</label>
 	<label>
 		Restrict Visibility: <input type="checkbox" name="restricted" ${loggedIn ? '' : 'disabled title="You must be logged in to restrict visibility"'} >
+	</label>
+	<label>
+		Target URL (Preview): ${CopyableOutputLink("", "target-url-preview", "url sanitize")}
 	</label>
 	<button>Create link!</button>
 	<label>

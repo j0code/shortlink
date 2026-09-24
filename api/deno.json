@@ -2,7 +2,8 @@
 	"name": "@j0code/shortlink-api",
 	"version": "0.0.1",
 	"exports": {
-		".": "./api.ts"
+		".": "./api.ts",
+		"./url": "./url.ts"
 	},
 	"imports": {
 		"@std/assert": "jsr:@std/assert@^1.0.19",

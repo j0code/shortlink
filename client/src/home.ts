@@ -1,4 +1,5 @@
 import API, { getKey } from "@j0code/shortlink-api"
+import { sanitizeLink, checkURLValidity } from "@j0code/shortlink-api/url"
 import { installCopyEventListeners } from "./copyable.ts"
 import { installNavbarListeners } from "./navbar.ts"
 
@@ -7,6 +8,7 @@ const inspectForm = document.querySelector("#inspect-shortlink") as HTMLFormElem
 const loginForm = document.querySelector("#login") as HTMLFormElement | null
 const shortlinksButton = document.querySelector("#shortlinks-button") as HTMLButtonElement | null
 const logoutButton = document.querySelector("#logout-button") as HTMLButtonElement | null
+const targetUrlPreview = createForm.elements.namedItem("target-url-preview") as HTMLOutputElement
 
 const api = new API(location.href)
 
@@ -14,12 +16,16 @@ createForm.addEventListener("submit", async event => {
 	event.preventDefault()
 
 	const formData = new FormData(createForm)
-	const url = formData.get("url") as string
+	const url = safeURL(formData.get("url") as string)
+	if (!url) return // TODO: display error
 	const expires = formData.get("expires") as string
+	const sanitize = formData.get("sanitize") == "on"
 	const claim = formData.get("claim") == "on"
 	const restricted = formData.get("restricted") == "on"
 	const expiresAt = expires === "never" ? null : Temporal.Now.zonedDateTimeISO().add(Temporal.Duration.from(expires)).toInstant()
-	const result = await api.createShortlink(url, claim, restricted, expiresAt)
+	const targetUrl = sanitize ? sanitizeLink(url) : url
+	
+	const result = await api.createShortlink(targetUrl.href, claim, restricted, expiresAt)
 
 	if (!result.success) {
 		alert(`${result.error}\n${result.details}`)
@@ -36,6 +42,37 @@ createForm.addEventListener("submit", async event => {
 	shortlinkOutput.tabIndex = 0
 	shortlinkIdOutput.tabIndex = 0
 	linkButton.href = shortlinkUrl
+})
+
+createForm.addEventListener("change", event => {
+	const target = event.target as HTMLInputElement
+	if (!["sanitize", "url"].includes(target.name)) return
+
+	const formData = new FormData(createForm)
+	const url = safeURL(formData.get("url") as string)
+	const sanitize = formData.get("sanitize") == "on"
+
+	if (!url) {
+		targetUrlPreview.value = ""
+		return
+	}
+
+	const { valid, message } = checkURLValidity(url)
+
+	console.log(valid, message)
+
+	if (target.name == "url") {
+		target.setCustomValidity(message)
+		target.reportValidity()
+	}
+
+	if (!valid) {
+		targetUrlPreview.value = ""
+		return
+	}
+
+	const targetUrl = sanitize ? sanitizeLink(url) : url
+	targetUrlPreview.value = targetUrl.href
 })
 
 inspectForm.addEventListener("submit", event => {
@@ -86,6 +123,20 @@ function setCookies(id: string, key: string) {
 	const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30) // 30 days
 	document.cookie = `user_id=${id}; expires=${expires.toUTCString()}; path=/`
 	document.cookie = `auth_key=${key}; expires=${expires.toUTCString()}; path=/`
+}
+
+function safeURL(url: string) {
+	url = url.trim()
+	if (!url.startsWith("https://") && !url.startsWith("http://")) {
+		url = `https://${url}`
+	}
+
+	try {
+		const urlObj = new URL(url)
+		return urlObj
+	} catch {
+		return null
+	}
 }
 
 installCopyEventListeners()

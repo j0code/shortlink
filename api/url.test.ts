@@ -1,5 +1,5 @@
 import { assertEquals } from "@std/assert"
-import { sanitizeLink } from "./sanitize.ts"
+import { sanitizeLink } from "./url.ts"
 
 const cases = [
 	{

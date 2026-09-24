@@ -50,10 +50,10 @@ const commonTrackingParams = [
 	"via", // generic referrer
 ]
 
-export function sanitizeLink(link: string) {
-	const url = new URL(link)
+export function sanitizeLink(link: string | URL) {
+	const url = link instanceof URL ? link : new URL(link)
 
-	if (!url.search) return
+	if (!url.search) return url
 
 	const search = new URLSearchParams(url.search)
 	
@@ -76,5 +76,44 @@ export function sanitizeLink(link: string) {
 
 	url.search = search.toString()
 
-	return url.href
+	return url
+}
+
+export function checkURLValidity(url: URL) {
+	const { protocol, hostname } = url
+
+	if (!["http:", "https:"].includes(protocol)) {
+		return { valid: false, message: "Only http:// and https:// are valid schemes." }
+	}
+
+	if (isIP(hostname)) {
+		return { valid: false, message: "Target URL hostname must not be an IP." }
+	}
+
+	const parts = hostname.split(".")
+
+	if (parts.some(part => part.length == 0)) {
+		return { valid: false, message: "Target URL hostname must not have empty parts." }
+	}
+
+	if (parts.at(-1) == "localhost") {
+		return { valid: false, message: "Target URL must not be a loopback address." }
+	}
+
+	if (parts.length < 2) {
+		return { valid: false, message: "Target URL hostname must not be a stray TLD." }
+	}
+
+	return { valid: true, message: "" }
+}
+
+/**
+ * Heuristic for detecting IPv6 / IPv4 addresses
+ * @param hostname Hostname from URL object
+ */
+function isIP(hostname: string) {
+	if (hostname[0] == "[") return true
+
+	const last = hostname.charCodeAt(hostname.length - 1)
+	return last >= 48 && last <= 57
 }
